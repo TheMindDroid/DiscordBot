@@ -1,3 +1,5 @@
+//Hypixel Bot: Sends Hypixel Skyblock player statistics to Discord channels.
+
 package commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -9,6 +11,7 @@ import zone.nora.slothpixel.guild.member.GuildMember;
 import zone.nora.slothpixel.player.Player;
 import zone.nora.slothpixel.skyblock.items.SkyblockItem;
 import zone.nora.slothpixel.skyblock.players.SkyblockPlayer;
+import zone.nora.slothpixel.skyblock.players.minions.SkyblockMinions;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkill;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkills;
 import zone.nora.slothpixel.skyblock.players.slayer.Slayer;
@@ -30,7 +33,7 @@ public class Hypixel extends ListenerAdapter {
         }
 
         if (messageSentArray.length == 1) {
-            sendErrorMessage(event, "Invalid Arguments...", "Usage: ~hypixel [guild/stats/slayer/skills]", false);
+            sendErrorMessage(event, "Invalid Arguments...", "Usage: ~hypixel [minions/guild/skills/slayer/stats]", false);
             return;
         }
 
@@ -49,6 +52,9 @@ public class Hypixel extends ListenerAdapter {
             case "skills":
                 getSkills(event, hypixel, messageSentArray);
                 break;
+            case "minions":
+                getMinions(event, hypixel, messageSentArray);
+                break;
             default:
                 sendErrorMessage(event, "Invalid Arguments...", "Usage: ~hypixel [guild/stats/slayer/skills]", false);
                 break;
@@ -63,7 +69,6 @@ public class Hypixel extends ListenerAdapter {
         try {
             /*Currently only displays my personal Guild as inputting other names can throw unknown exceptions and often
             takes a long time to loop through each individual player of a large guild. I will revisit this later.*/
-
             Guild guild = hypixel.getGuild("86473522c26e4c2daf8b3fff05540b85");
 
             EmbedBuilder eb = new EmbedBuilder();
@@ -379,6 +384,140 @@ public class Hypixel extends ListenerAdapter {
 
         } catch (Exception e) {
             sendErrorMessage(event, "API Unavailable", "Unable to retrieve Skills data.*", true);
+            event.getChannel().sendMessage("**Exception:** " + e).queue();
+        }
+    }
+
+
+    public void getMinions(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
+        if (messageSentArray.length == 2) {
+            sendErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
+                    "Usage: ~hypixel minions <player>", false);
+            return;
+        }
+
+        try {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(Color.GREEN);
+
+            String playerName = messageSentArray[2];
+            Player player = hypixel.getPlayer(playerName);
+            SkyblockMinions skyblockMinions = hypixel.getSkyblockProfile(playerName).getMembers().get(player.getUuid()).getMinions();
+
+            eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+            eb.setTitle(":video_game: " + playerName + "'s Minions :video_game:");
+
+            try {
+                eb.addField(":evergreen_tree: Acacia Minion", "Level: " + skyblockMinions.getAcacia(), true);
+            } catch (Exception e) {
+                eb.addField(":evergreen_tree: Acacia Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":evergreen_tree: Birch Minion", "Level: " + skyblockMinions.getBirch(), true);
+            } catch (Exception e) {
+                eb.addField(":evergreen_tree: Birch Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Cactus Minion", "Level: " + skyblockMinions.getCactus(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Cactus Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: Cobblestone Minion", "Level: " + skyblockMinions.getCobblestone(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: Cobblestone Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Cocoa Minion", "Level: " + skyblockMinions.getCocoa(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Cocoa Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":crossed_swords: Cow Minion", "Level: " + skyblockMinions.getCow(), true);
+            } catch (Exception e) {
+                eb.addField(":crossed_swords: Cow Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":evergreen_tree: Dark Oak Minion", "Level: " + skyblockMinions.getDarkOak(), true);
+            } catch (Exception e) {
+                eb.addField(":evergreen_tree: Dark Oak Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: End Stone Minion", "Level: " + skyblockMinions.getEnderStone(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: End Stone Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":crossed_swords: Ghast Minion", "Level: " + skyblockMinions.getGhast(), true);
+            } catch (Exception e) {
+                eb.addField(":crossed_swords: Ghast Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: Gold Minion", "Level: " + skyblockMinions.getGold(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: Gold Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: Gravel Minion", "Level: " + skyblockMinions.getGravel(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: Gravel Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":evergreen_tree: Jungle Minion", "Level: " + skyblockMinions.getJungle(), true);
+            } catch (Exception e) {
+                eb.addField(":evergreen_tree: Jungle Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Melon Minion", "Level: " + skyblockMinions.getMelon(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Melon Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Nether Warts Minion", "Level: " + skyblockMinions.getNetherWarts(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Nether Warts Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: Quartz Minion", "Level: " + skyblockMinions.getQuartz(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: Quartz Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":crossed_swords: Rabbit Minion", "Level: " + skyblockMinions.getRabbit(), true);
+            } catch (Exception e) {
+                eb.addField(":crossed_swords: Rabbit Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":crossed_swords: Revenant Minion", "Level: " + skyblockMinions.getRevenant(), true);
+            } catch (Exception e) {
+                eb.addField(":crossed_swords: Revenant Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":pick: Snow Minion", "Level: " + skyblockMinions.getSnow(), true);
+            } catch (Exception e) {
+                eb.addField(":pick: Snow Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":evergreen_tree: Spruce Minion", "Level: " + skyblockMinions.getSpruce(), true);
+            } catch (Exception e) {
+                eb.addField(":evergreen_tree: Spruce Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Sugar Cane Minion", "Level: " + skyblockMinions.getSugarCane(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Sugar Cane Minion", "Player has not unlocked this minion.", true);
+            }
+            try {
+                eb.addField(":tractor: Wheat Minion", "Level: " + skyblockMinions.getWheat(), true);
+            } catch (Exception e) {
+                eb.addField(":tractor: Wheat Minion", "Player has not unlocked this minion.", true);
+            }
+
+            eb.setFooter(addDatedFooter(event));
+
+            event.getChannel().sendMessage(eb.build()).queue();
+        } catch (Exception e) {
+            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true);
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
