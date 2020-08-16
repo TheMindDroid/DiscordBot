@@ -16,6 +16,7 @@ import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkill;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkills;
 import zone.nora.slothpixel.skyblock.players.slayer.Slayer;
 import zone.nora.slothpixel.skyblock.players.stats.auctions.SkyblockPlayerAuctions;
+import zone.nora.slothpixel.skyblock.players.stats.kills.SkyblockPlayerKills;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -63,12 +64,11 @@ public class Hypixel extends ListenerAdapter {
 
 
     public void getGuildInformation(GuildMessageReceivedEvent event, Slothpixel hypixel) {
+        //Currently only gathers information of personal Guild as larger Guilds have a tendency to throw exceptions.
 
         event.getChannel().sendMessage("Processing request...").queue();
 
         try {
-            /*Currently only displays my personal Guild as inputting other names can throw unknown exceptions and often
-            takes a long time to loop through each individual player of a large guild. I will revisit this later.*/
             Guild guild = hypixel.getGuild("86473522c26e4c2daf8b3fff05540b85");
 
             EmbedBuilder eb = new EmbedBuilder();
@@ -90,27 +90,31 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls member list.
             for (GuildMember member : guild.getMembers()) {
-                String name = Objects.requireNonNull(member.getProfile()).getUsername();
-                Player player = hypixel.getPlayer(name);
+                try {
+                    String name = Objects.requireNonNull(member.getProfile()).getUsername();
+                    Player player = hypixel.getPlayer(name);
 
-                if (player.getOnline()) {
-                    online.append(name).append("\n");
-                } else {
-                    offline.append(name).append("\n");
+                    if (player.getOnline()) {
+                        online.append(name).append("\n");
+                    } else {
+                        offline.append(name).append("\n");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
             eb.addField("Online Players: :green_circle:", online.toString(), true);
             eb.addField("Offline Players: :red_circle:", offline.toString(), true);
 
-            //Calls guild exp.
+            //Calls guild experience.
             eb.addField(":chart_with_upwards_trend: Guild Level", "Level: " + guild.getLevel()
                     + " \nExperience: " + addCommas(guild.getExp()), true);
 
             eb.setFooter(addDatedFooter(event));
             event.getChannel().sendMessage(eb.build()).queue();
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to gather guild information, please try again later...", false);
+            sendErrorMessage(event, "API Unavailable", "Unable to gather Guild information." , false);
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -179,7 +183,6 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls the armor the player is wearing.
             StringBuilder armor = new StringBuilder();
-
             for (SkyblockItem skyblockItem : skyblockPlayer.getArmor()) {
                 String[] shortenedName = skyblockItem.getName().split("");
 
@@ -190,7 +193,6 @@ public class Hypixel extends ListenerAdapter {
                         break;
                     }
                 }
-
                 if (!skyblockItem.getName().isEmpty()) {
                     armor.append("\n");
                 }
@@ -229,10 +231,30 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls fishing catches.
             try {
+
+                SkyblockPlayerKills skyblockPlayerKills = skyblockPlayer.getStats().getKills();
+
+                int totalSeaCreatureKills = skyblockPlayerKills.getWaterHydra()
+                        + skyblockPlayerKills.getSeaWitch()
+                        + skyblockPlayerKills.getSeaWalker()
+                        + skyblockPlayerKills.getSeaLeech()
+                        + skyblockPlayerKills.getSeaGuardian()
+                        + skyblockPlayerKills.getSeaArcher()
+                        + skyblockPlayerKills.getPondSquid()
+                        + skyblockPlayerKills.getNightSquid()
+                        + skyblockPlayerKills.getGuardianEmperor()
+                        + skyblockPlayerKills.getFrozenSteve()
+                        + skyblockPlayerKills.getFrostyTheSnowman()
+                        + skyblockPlayerKills.getDeepSeaProtector()
+                        + skyblockPlayerKills.getChickenDeep()
+                        + skyblockPlayerKills.getCatfish()
+                        + skyblockPlayerKills.getCarrotKing();
+
                 eb.addField(":fishing_pole_and_fish: Items Fished:", "Total Items: " + addCommas(skyblockPlayer.getStats().getItemsFished().getTotal())
                         + "\nNormal Items: " + addCommas(skyblockPlayer.getStats().getItemsFished().getNormal())
                         + "\nTreasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getTreasure())
-                        + "\nLarge Treasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getLargeTreasure()), true);
+                        + "\nLarge Treasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getLargeTreasure())
+                        + "\nSea Creatures Killed: " + addCommas(totalSeaCreatureKills), true);
             } catch (Exception e) {
                 eb.addField(":tropical_fish: Items Fished:", "Unable to retrieve fishing data.", true);
             }
@@ -317,66 +339,79 @@ public class Hypixel extends ListenerAdapter {
             eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
             eb.setTitle(":video_game: " + playerName + "'s Skills :video_game:");
 
+            double totalSkillLevelsAdded = 0;
             try {
+                totalSkillLevelsAdded += skyblockSkills.getAlchemy().getLevel();
                 eb.addField(":test_tube: Alchemy - Level: " + skyblockSkills.getAlchemy().getLevel(),
                         formatSkills(skyblockSkills.getAlchemy()), false);
             } catch (Exception e) {
                 eb.addField(":test_tube: Alchemy", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getCarpentry().getLevel();
                 eb.addField(":tools: Carpentry - Level: " + skyblockSkills.getCarpentry().getLevel(),
                         formatSkills(skyblockSkills.getCarpentry()), false);
             } catch (Exception e) {
                 eb.addField(":tools: Carpentry", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getCombat().getLevel();
                 eb.addField(":crossed_swords: Combat - Level: " + skyblockSkills.getCombat().getLevel(),
                         formatSkills(skyblockSkills.getCombat()), false);
             } catch (Exception e){
                 eb.addField(":crossed_swords: Combat", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getEnchanting().getLevel();
                 eb.addField(":book: Enchanting - Level: " + skyblockSkills.getEnchanting().getLevel(),
                         formatSkills(skyblockSkills.getEnchanting()), false);
             } catch (Exception e) {
                 eb.addField(":book: Enchanting", "Player has not progressed in this skill.",false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getFarming().getLevel();
                 eb.addField(":tractor: Farming - Level: " + skyblockSkills.getFarming().getLevel(),
                         formatSkills(skyblockSkills.getFarming()), false);
             } catch (Exception e) {
                 eb.addField(":tractor: Farming", "Player has not progressed in this skill.",false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getFishing().getLevel();
                 eb.addField(":fishing_pole_and_fish: Fishing - Level: " + skyblockSkills.getFishing().getLevel(),
                         formatSkills(skyblockSkills.getFishing()), false);
             } catch (Exception e) {
                 eb.addField(":fishing_pole_and_fish: Fishing", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getForaging().getLevel();
                 eb.addField(":evergreen_tree: Foraging - Level: " + skyblockSkills.getForaging().getLevel(),
                         formatSkills(skyblockSkills.getForaging()), false);
             } catch (Exception e) {
                 eb.addField(":evergreen_tree: Foraging", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getMining().getLevel();
                 eb.addField(":pick: Mining - Level: " + skyblockSkills.getMining().getLevel(),
                         formatSkills(skyblockSkills.getMining()), false);
             } catch (Exception e) {
                 eb.addField(":pick: Mining", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getRunecrafting().getLevel();
                 eb.addField(":rainbow: Runecrafting - Level: " + skyblockSkills.getRunecrafting().getLevel(),
                         formatSkills(skyblockSkills.getRunecrafting()), false);
             } catch (Exception e) {
                 eb.addField(":rainbow: Runecrafting", "Player has not progressed in this skill.", false);
             }
             try {
+                totalSkillLevelsAdded += skyblockSkills.getTaming().getLevel();
                 eb.addField(":service_dog: Taming - Level: " + skyblockSkills.getTaming().getLevel(),
                         formatSkills(skyblockSkills.getTaming()), false);
             } catch (Exception e) {
                 eb.addField(":service_dog: Taming ", "Player has not progressed in this skill.", false);
             }
+
+            eb.addField(":bar_chart: Average Skill Level:", "Level: " + (totalSkillLevelsAdded / 10), true);
 
             eb.setFooter(addDatedFooter(event));
 
