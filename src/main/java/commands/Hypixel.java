@@ -23,6 +23,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 public class Hypixel extends ListenerAdapter {
 
@@ -897,42 +898,18 @@ public class Hypixel extends ListenerAdapter {
         eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
         eb.setTitle(":video_game: " + playerName + "'s Foraging Collection :video_game:");
 
-        try {
-            eb.addField(":evergreen_tree: Acacia Wood", "Level: " + skyblockCollectionTiers.getLog_2()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog_2()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Acacia Wood", "Player has not progressed in this collection.", true);
+        List<Collection> collections = new ArrayList<>();
+        collections.add(new Collection(skyblockCollectionTiers.getLog_2(), skyblockCollectionExp.getLog_2(), ":evergreen_tree: Acacia Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog2(), skyblockCollectionExp.getLog2(), ":evergreen_tree: Birch Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog_21(), skyblockCollectionExp.getLog_21(), ":evergreen_tree: Dark Oak Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog(), skyblockCollectionExp.getLog(), ":evergreen_tree: Oak Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog3(), skyblockCollectionExp.getLog3(), ":evergreen_tree: Jungle Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog1(), skyblockCollectionExp.getLog1(), ":evergreen_tree: Spruce Wood"));
+
+        for (Collection collection : collections) {
+            eb.addField(collection.getCompletedString());
         }
-        try {
-            eb.addField(":evergreen_tree: Birch Wood", "Level: " + skyblockCollectionTiers.getLog2()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog2()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Birch Wood", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":evergreen_tree: Dark Oak Wood", "Level: " + skyblockCollectionTiers.getLog_21()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog_21()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Dark Oak Wood", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":evergreen_tree: Oak Wood", "Level: " + skyblockCollectionTiers.getLog()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Oak Wood", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":evergreen_tree: Jungle Wood", "Level: " + skyblockCollectionTiers.getLog3()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog3()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Jungle Wood", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":evergreen_tree: Spruce Wood", "Level: " + skyblockCollectionTiers.getLog1()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog1()), true);
-        } catch (Exception e) {
-            eb.addField(":evergreen_tree: Spruce Wood", "Player has not progressed in this collection.", true);
-        }
+
         eb.setFooter(addDatedFooter(event));
 
         event.getChannel().sendMessage(eb.build()).queue();
