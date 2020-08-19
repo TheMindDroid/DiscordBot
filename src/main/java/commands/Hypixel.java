@@ -11,6 +11,7 @@ import zone.nora.slothpixel.guild.member.GuildMember;
 import zone.nora.slothpixel.player.Player;
 import zone.nora.slothpixel.skyblock.items.SkyblockItem;
 import zone.nora.slothpixel.skyblock.players.SkyblockPlayer;
+import zone.nora.slothpixel.skyblock.players.collection.SkyblockCollection;
 import zone.nora.slothpixel.skyblock.players.minions.SkyblockMinions;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkill;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkills;
@@ -34,7 +35,8 @@ public class Hypixel extends ListenerAdapter {
         }
 
         if (messageSentArray.length == 1) {
-            sendErrorMessage(event, "Invalid Arguments...", "Usage: ~hypixel [minions/guild/skills/slayer/stats]", false);
+            sendErrorMessage(event, "Invalid Arguments...",
+                    "Usage: ~hypixel [collections/minions/guild/skills/slayer/stats]", false);
             return;
         }
 
@@ -56,8 +58,12 @@ public class Hypixel extends ListenerAdapter {
             case "minions":
                 getMinions(event, hypixel, messageSentArray);
                 break;
+            case "collections":
+                getCollections(event, hypixel, messageSentArray);
+                break;
             default:
-                sendErrorMessage(event, "Invalid Arguments...", "Usage: ~hypixel [guild/stats/slayer/skills]", false);
+                sendErrorMessage(event, "Invalid Arguments...",
+                        "Usage: ~hypixel [collections/minions/guild/stats/slayer/skills]", false);
                 break;
         }
     }
@@ -65,7 +71,6 @@ public class Hypixel extends ListenerAdapter {
 
     public void getGuildInformation(GuildMessageReceivedEvent event, Slothpixel hypixel) {
         //Currently only gathers information of personal Guild as larger Guilds have a tendency to throw exceptions.
-
         event.getChannel().sendMessage("Processing request...").queue();
 
         try {
@@ -151,7 +156,6 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls the rank of the player.
             StringBuilder rank = new StringBuilder();
-
             try {
                 String[] rankArray = player.getRank().split("");
 
@@ -193,6 +197,7 @@ public class Hypixel extends ListenerAdapter {
                         break;
                     }
                 }
+
                 if (!skyblockItem.getName().isEmpty()) {
                     armor.append("\n");
                 }
@@ -231,7 +236,6 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls fishing catches.
             try {
-
                 SkyblockPlayerKills skyblockPlayerKills = skyblockPlayer.getStats().getKills();
 
                 int totalSeaCreatureKills = skyblockPlayerKills.getWaterHydra()
@@ -250,7 +254,8 @@ public class Hypixel extends ListenerAdapter {
                         + skyblockPlayerKills.getCatfish()
                         + skyblockPlayerKills.getCarrotKing();
 
-                eb.addField(":fishing_pole_and_fish: Items Fished:", "Total Items: " + addCommas(skyblockPlayer.getStats().getItemsFished().getTotal())
+                eb.addField(":fishing_pole_and_fish: Items Fished:", "Total Items: "
+                        + addCommas(skyblockPlayer.getStats().getItemsFished().getTotal())
                         + "\nNormal Items: " + addCommas(skyblockPlayer.getStats().getItemsFished().getNormal())
                         + "\nTreasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getTreasure())
                         + "\nLarge Treasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getLargeTreasure())
@@ -410,7 +415,6 @@ public class Hypixel extends ListenerAdapter {
             } catch (Exception e) {
                 eb.addField(":service_dog: Taming ", "Player has not progressed in this skill.", false);
             }
-
             eb.addField(":bar_chart: Average Skill Level:", "Level: " + (totalSkillLevelsAdded / 10), true);
 
             eb.setFooter(addDatedFooter(event));
@@ -547,7 +551,6 @@ public class Hypixel extends ListenerAdapter {
             } catch (Exception e) {
                 eb.addField(":tractor: Wheat Minion", "Player has not unlocked this minion.", true);
             }
-
             eb.setFooter(addDatedFooter(event));
 
             event.getChannel().sendMessage(eb.build()).queue();
@@ -555,6 +558,459 @@ public class Hypixel extends ListenerAdapter {
             sendErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true);
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
+    }
+
+
+    //Returns the collection stats of the player.
+    public void getCollections(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
+        if (messageSentArray.length == 2 || messageSentArray.length == 3) {
+            sendErrorMessage(event, "Invalid Arguments...",
+                    "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",true);
+            return;
+        }
+
+        try {
+            String playerName = messageSentArray[2];
+            Player player = hypixel.getPlayer(playerName);
+            SkyblockCollection skyblockCollectionTiers = hypixel.getSkyblockProfile(playerName).getMembers().get(player.getUuid()).getCollectionTiers();
+            SkyblockCollection skyblockCollectionExp = hypixel.getSkyblockProfile(playerName).getMembers().get(player.getUuid()).getCollection();
+
+            switch (messageSentArray[3]) {
+                case "farming":
+                    getFarmingCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
+                    break;
+                case "mining":
+                    getMiningCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
+                    break;
+                case "combat":
+                    getCombatCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
+                    break;
+                case "foraging":
+                    getForagingCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
+                    break;
+                case "fishing":
+                    getFishingCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
+                    break;
+                default:
+                    sendErrorMessage(event, "Invalid Arguments...",
+                            "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",true);
+                    break;
+            }
+        } catch (Exception e) {
+            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true);
+            event.getChannel().sendMessage("**Exception:** " + e).queue();
+        }
+    }
+
+
+    //Returns farming collection data.
+    public static void getFarmingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
+                                            SkyblockCollection skyblockCollectionExp, String playerName) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.GREEN);
+
+        eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+        eb.setTitle(":video_game: " + playerName + "'s Farming Collection :video_game:");
+
+        try {
+            eb.addField(":tractor: Cactus", "Level: " + skyblockCollectionTiers.getCactus()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCactus()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Cactus", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Carrot", "Level: " + skyblockCollectionTiers.getCarrotItem()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCarrotItem()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Carrot", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Chicken", "Level: " + skyblockCollectionTiers.getRawChicken()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawChicken()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Chicken", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Feather", "Level: " + skyblockCollectionTiers.getFeather()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getFeather()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Feather", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Leather", "Level: " + skyblockCollectionTiers.getLeather()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLeather()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Leather", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Melon", "Level: " + skyblockCollectionTiers.getMelon()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMelon()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Melon", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Mushroom", "Level: " + skyblockCollectionTiers.getMushroomCollection()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMushroomCollection()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Mushroom", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Mutton", "Level: " + skyblockCollectionTiers.getMutton()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMutton()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Mutton", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Nether Wart", "Level: " + skyblockCollectionTiers.getNetherStalk()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getNetherStalk()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Nether Wart", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Pork Chop", "Level: " + skyblockCollectionTiers.getPork()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPork()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Pork Chop", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Potato", "Level: " + skyblockCollectionTiers.getPotatoItem()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPotatoItem()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Potato", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Pumpkin", "Level: " + skyblockCollectionTiers.getPumpkin()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPumpkin()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Pumpkin", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Rabbit", "Level: " + skyblockCollectionTiers.getRabbit()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRabbit()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Rabbit", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Seeds", "Level: " + skyblockCollectionTiers.getSeeds()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSeeds()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Seeds", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Sugar", "Level: " + skyblockCollectionTiers.getSugarCane()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSugarCane()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Sugar", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":tractor: Wheat", "Level: " + skyblockCollectionTiers.getWheat()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getWheat()), true);
+        } catch (Exception e) {
+            eb.addField(":tractor: Wheat", "Player has not progressed in this collection.", true);
+        }
+        eb.setFooter(addDatedFooter(event));
+
+        event.getChannel().sendMessage(eb.build()).queue();
+    }
+
+
+    //Returns mining collection data.
+    public static void getMiningCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
+                                           SkyblockCollection skyblockCollectionExp, String playerName) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.GREEN);
+
+        eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+        eb.setTitle(":video_game: " + playerName + "'s Mining Collection :video_game:");
+
+        try {
+            eb.addField(":pick: Coal", "Level: " + skyblockCollectionTiers.getCoal()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCoal()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Coal", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Cobble Stone", "Level: " + skyblockCollectionTiers.getCobblestone()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCobblestone()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Cobble Stone", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Diamond", "Level: " + skyblockCollectionTiers.getDiamond()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getDiamond()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Diamond", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Emerald", "Level: " + skyblockCollectionTiers.getEmerald()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEmerald()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Emerald", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Endstone", "Level: " + skyblockCollectionTiers.getEnderStone()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEnderStone()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Endstone", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Glowstone Dust", "Level: " + skyblockCollectionTiers.getGlowstoneDust()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGlowstoneDust()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Glowstone Dust", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Gold", "Level: " + skyblockCollectionTiers.getGoldIngot()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGoldIngot()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Gold", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Gravel", "Level: " + skyblockCollectionTiers.getGravel()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGravel()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Gravel", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Ice", "Level: " + skyblockCollectionTiers.getIce()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getIce()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Ice", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Iron", "Level: " + skyblockCollectionTiers.getIronIngot()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getIronIngot()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Iron", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Netherrack", "Level: " + skyblockCollectionTiers.getNetherrack()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getNetherrack()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Netherrack", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Nether Quartz", "Level: " + skyblockCollectionTiers.getQuartz()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getQuartz()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Nether Quartz", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Obsidian", "Level: " + skyblockCollectionTiers.getObsidian()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getObsidian()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Obsidian", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Redstone", "Level: " + skyblockCollectionTiers.getRedstone()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRedstone()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Redstone", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":pick: Sand", "Level: " + skyblockCollectionTiers.getSand()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSand()), true);
+        } catch (Exception e) {
+            eb.addField(":pick: Sand", "Player has not progressed in this collection.", true);
+        }
+        eb.setFooter(addDatedFooter(event));
+
+        event.getChannel().sendMessage(eb.build()).queue();
+    }
+
+
+    //Returns combat collection data.
+    public static void getCombatCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
+                                           SkyblockCollection skyblockCollectionExp, String playerName) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.GREEN);
+
+        eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+        eb.setTitle(":video_game: " + playerName + "'s Combat Collection :video_game:");
+
+        try {
+            eb.addField(":crossed_swords: Blaze Rod", "Level: " + skyblockCollectionTiers.getBlazeRod()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getBlazeRod()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Blaze Rod", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Bone", "Level: " + skyblockCollectionTiers.getBone()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getBone()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Bone", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Ender Pearl", "Level: " + skyblockCollectionTiers.getEnderpearl()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEnderpearl()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Ender Pearl", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Ghast Tear", "Level: " + skyblockCollectionTiers.getGhastTear()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGhastTear()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Ghast Tear", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Magma Cream", "Level: " + skyblockCollectionTiers.getMagmaCream()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMagmaCream()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Magma Cream", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Rotten Flesh", "Level: " + skyblockCollectionTiers.getRottenFlesh()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRottenFlesh()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Rotten Flesh", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Slimeball", "Level: " + skyblockCollectionTiers.getSlimeBall()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSlimeBall()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Slimeball", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: Spider Eye", "Level: " + skyblockCollectionTiers.getSpiderEye()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSpiderEye()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: Spider Eye", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":crossed_swords: String", "Level: " + skyblockCollectionTiers.getString()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getString()), true);
+        } catch (Exception e) {
+            eb.addField(":crossed_swords: String", "Player has not progressed in this collection.", true);
+        }
+        eb.setFooter(addDatedFooter(event));
+
+        event.getChannel().sendMessage(eb.build()).queue();
+    }
+
+
+    //Returns foraging collection data.
+    public static void getForagingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
+                                             SkyblockCollection skyblockCollectionExp, String playerName) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.GREEN);
+
+        eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+        eb.setTitle(":video_game: " + playerName + "'s Foraging Collection :video_game:");
+
+        try {
+            eb.addField(":evergreen_tree: Acacia Wood", "Level: " + skyblockCollectionTiers.getLog_2()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog_2()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Acacia Wood", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":evergreen_tree: Birch Wood", "Level: " + skyblockCollectionTiers.getLog2()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog2()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Birch Wood", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":evergreen_tree: Dark Oak Wood", "Level: " + skyblockCollectionTiers.getLog_21()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog_21()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Dark Oak Wood", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":evergreen_tree: Oak Wood", "Level: " + skyblockCollectionTiers.getLog()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Oak Wood", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":evergreen_tree: Jungle Wood", "Level: " + skyblockCollectionTiers.getLog3()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog3()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Jungle Wood", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":evergreen_tree: Spruce Wood", "Level: " + skyblockCollectionTiers.getLog1()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLog1()), true);
+        } catch (Exception e) {
+            eb.addField(":evergreen_tree: Spruce Wood", "Player has not progressed in this collection.", true);
+        }
+        eb.setFooter(addDatedFooter(event));
+
+        event.getChannel().sendMessage(eb.build()).queue();
+    }
+
+
+    //Returns fishing collection data.
+    public static void getFishingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
+                                            SkyblockCollection skyblockCollectionExp, String playerName) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.GREEN);
+
+        eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
+        eb.setTitle(":video_game: " + playerName + "'s Fishing Collection :video_game:");
+
+        try {
+            eb.addField(":fishing_pole_and_fish: Clay", "Level: " + skyblockCollectionTiers.getClayBall()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getClayBall()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Clay", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Clown Fish", "Level: " + skyblockCollectionTiers.getRawFish2()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish2()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Clown Fish", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Inc Sack", "Level: " + skyblockCollectionTiers.getInkSack()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getInkSack()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Inc Sack", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Lily Pad", "Level: " + skyblockCollectionTiers.getWaterLily()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getWaterLily()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Lily Pad", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Raw Fish", "Level: " + skyblockCollectionTiers.getRawFish()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Raw Fish", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Raw Salmon", "Level: " + skyblockCollectionTiers.getRawFish1()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish1()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Raw Salmon", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Prismarine Crystals", "Level: " + skyblockCollectionTiers.getPrismarineCrystals()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPrismarineCrystals()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Prismarine Crystals", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Prismarine Shard", "Level: " + skyblockCollectionTiers.getPrismarineShard()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPrismarineShard()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Prismarine Shard", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Puffer Fish", "Level: " + skyblockCollectionTiers.getRawFish3()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish3()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Puffer Fish", "Player has not progressed in this collection.", true);
+        }
+        try {
+            eb.addField(":fishing_pole_and_fish: Sponge", "Level: " + skyblockCollectionTiers.getSponge()
+                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSponge()), true);
+        } catch (Exception e) {
+            eb.addField(":fishing_pole_and_fish: Sponge", "Player has not progressed in this collection.", true);
+        }
+        eb.setFooter(addDatedFooter(event));
+
+        event.getChannel().sendMessage(eb.build()).queue();
     }
 
 
