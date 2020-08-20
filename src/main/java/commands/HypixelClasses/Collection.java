@@ -1,5 +1,5 @@
 //Manages data for the Skyblock Collections.
-package commands;
+package commands.HypixelClasses;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -7,11 +7,11 @@ import java.text.DecimalFormat;
 
 public class Collection {
 
-    int skyblockCollectionTiers;
-    int skyblockCollectionExp;
-    String collectionName;
+    private int skyblockCollectionTiers;
+    private int skyblockCollectionExp;
+    private String collectionName;
 
-    Collection (int skyblockCollectionTiers, int skyblockCollectionExp, String collectionName) {
+    public Collection(int skyblockCollectionTiers, int skyblockCollectionExp, String collectionName) {
         this.skyblockCollectionTiers = skyblockCollectionTiers;
         this.skyblockCollectionExp = skyblockCollectionExp;
         this.collectionName = collectionName;

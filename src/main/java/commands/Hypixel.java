@@ -2,6 +2,7 @@
 
 package commands;
 
+import commands.HypixelClasses.Collection;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -613,104 +614,45 @@ public class Hypixel extends ListenerAdapter {
         eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
         eb.setTitle(":video_game: " + playerName + "'s Farming Collection :video_game:");
 
-        try {
-            eb.addField(":tractor: Cactus", "Level: " + skyblockCollectionTiers.getCactus()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCactus()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Cactus", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Carrot", "Level: " + skyblockCollectionTiers.getCarrotItem()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCarrotItem()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Carrot", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Chicken", "Level: " + skyblockCollectionTiers.getRawChicken()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawChicken()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Chicken", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Feather", "Level: " + skyblockCollectionTiers.getFeather()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getFeather()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Feather", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Leather", "Level: " + skyblockCollectionTiers.getLeather()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getLeather()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Leather", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Melon", "Level: " + skyblockCollectionTiers.getMelon()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMelon()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Melon", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Mushroom", "Level: " + skyblockCollectionTiers.getMushroomCollection()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMushroomCollection()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Mushroom", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Mutton", "Level: " + skyblockCollectionTiers.getMutton()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMutton()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Mutton", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Nether Wart", "Level: " + skyblockCollectionTiers.getNetherStalk()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getNetherStalk()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Nether Wart", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Pork Chop", "Level: " + skyblockCollectionTiers.getPork()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPork()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Pork Chop", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Potato", "Level: " + skyblockCollectionTiers.getPotatoItem()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPotatoItem()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Potato", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Pumpkin", "Level: " + skyblockCollectionTiers.getPumpkin()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPumpkin()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Pumpkin", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Rabbit", "Level: " + skyblockCollectionTiers.getRabbit()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRabbit()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Rabbit", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Seeds", "Level: " + skyblockCollectionTiers.getSeeds()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSeeds()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Seeds", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Sugar", "Level: " + skyblockCollectionTiers.getSugarCane()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSugarCane()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Sugar", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":tractor: Wheat", "Level: " + skyblockCollectionTiers.getWheat()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getWheat()), true);
-        } catch (Exception e) {
-            eb.addField(":tractor: Wheat", "Player has not progressed in this collection.", true);
-        }
-        eb.setFooter(addDatedFooter(event));
+        List<Collection> collections = new ArrayList<>();
+        collections.add(new Collection(skyblockCollectionTiers.getCactus(), skyblockCollectionExp.getCactus(),
+                ":tractor: Cactus"));
+        collections.add(new Collection(skyblockCollectionTiers.getCarrotItem(), skyblockCollectionExp.getCarrotItem(),
+                ":tractor: Carrot"));
+        collections.add(new Collection(skyblockCollectionTiers.getRawChicken(), skyblockCollectionExp.getRawChicken(),
+                ":tractor: Chicken"));
+        collections.add(new Collection(skyblockCollectionTiers.getFeather(), skyblockCollectionExp.getFeather(),
+                ":tractor: Feather"));
+        collections.add(new Collection(skyblockCollectionTiers.getLeather(), skyblockCollectionExp.getLeather(),
+                ":tractor: Leather"));
+        collections.add(new Collection(skyblockCollectionTiers.getMelon(), skyblockCollectionExp.getMelon(),
+                ":tractor: Melon"));
+        collections.add(new Collection(skyblockCollectionTiers.getMushroomCollection(), skyblockCollectionExp.getMushroomCollection(),
+                ":tractor: Mushroom"));
+        collections.add(new Collection(skyblockCollectionTiers.getMutton(), skyblockCollectionExp.getMutton(),
+                ":tractor: Mutton"));
+        collections.add(new Collection(skyblockCollectionTiers.getNetherStalk(), skyblockCollectionExp.getNetherStalk(),
+                ":tractor: Nether Wart"));
+        collections.add(new Collection(skyblockCollectionTiers.getPork(), skyblockCollectionExp.getPork(),
+                ":tractor: Pork Chop"));
+        collections.add(new Collection(skyblockCollectionTiers.getPotatoItem(), skyblockCollectionExp.getPotatoItem(),
+                ":tractor: Potato"));
+        collections.add(new Collection(skyblockCollectionTiers.getPumpkin(), skyblockCollectionExp.getPumpkin(),
+                ":tractor: Pumpkin"));
+        collections.add(new Collection(skyblockCollectionTiers.getRabbit(), skyblockCollectionExp.getRabbit(),
+                ":tractor: Rabbit"));
+        collections.add(new Collection(skyblockCollectionTiers.getSeeds(), skyblockCollectionExp.getSeeds(),
+                ":tractor: Seeds"));
+        collections.add(new Collection(skyblockCollectionTiers.getSugarCane(), skyblockCollectionExp.getSugarCane(),
+                ":tractor: Sugar Cane"));
+        collections.add(new Collection(skyblockCollectionTiers.getWheat(), skyblockCollectionExp.getWheat(),
+                ":tractor: Wheat"));
 
+        for (Collection collection : collections) {
+            eb.addField(collection.getCompletedString());
+        }
+
+        eb.setFooter(addDatedFooter(event));
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -814,8 +756,8 @@ public class Hypixel extends ListenerAdapter {
         } catch (Exception e) {
             eb.addField(":pick: Sand", "Player has not progressed in this collection.", true);
         }
-        eb.setFooter(addDatedFooter(event));
 
+        eb.setFooter(addDatedFooter(event));
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -883,8 +825,8 @@ public class Hypixel extends ListenerAdapter {
         } catch (Exception e) {
             eb.addField(":crossed_swords: String", "Player has not progressed in this collection.", true);
         }
-        eb.setFooter(addDatedFooter(event));
 
+        eb.setFooter(addDatedFooter(event));
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -899,19 +841,24 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Foraging Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getLog_2(), skyblockCollectionExp.getLog_2(), ":evergreen_tree: Acacia Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog2(), skyblockCollectionExp.getLog2(), ":evergreen_tree: Birch Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog_21(), skyblockCollectionExp.getLog_21(), ":evergreen_tree: Dark Oak Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog(), skyblockCollectionExp.getLog(), ":evergreen_tree: Oak Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog3(), skyblockCollectionExp.getLog3(), ":evergreen_tree: Jungle Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog1(), skyblockCollectionExp.getLog1(), ":evergreen_tree: Spruce Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog_2(), skyblockCollectionExp.getLog_2(),
+                ":evergreen_tree: Acacia Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog2(), skyblockCollectionExp.getLog2(),
+                ":evergreen_tree: Birch Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog_21(), skyblockCollectionExp.getLog_21(),
+                ":evergreen_tree: Dark Oak Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog(), skyblockCollectionExp.getLog(),
+                ":evergreen_tree: Oak Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog3(), skyblockCollectionExp.getLog3(),
+                ":evergreen_tree: Jungle Wood"));
+        collections.add(new Collection(skyblockCollectionTiers.getLog1(), skyblockCollectionExp.getLog1(),
+                ":evergreen_tree: Spruce Wood"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());
         }
 
         eb.setFooter(addDatedFooter(event));
-
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -985,8 +932,8 @@ public class Hypixel extends ListenerAdapter {
         } catch (Exception e) {
             eb.addField(":fishing_pole_and_fish: Sponge", "Player has not progressed in this collection.", true);
         }
-        eb.setFooter(addDatedFooter(event));
 
+        eb.setFooter(addDatedFooter(event));
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
