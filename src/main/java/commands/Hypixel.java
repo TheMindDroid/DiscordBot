@@ -666,95 +666,40 @@ public class Hypixel extends ListenerAdapter {
         eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
         eb.setTitle(":video_game: " + playerName + "'s Mining Collection :video_game:");
 
-        try {
-            eb.addField(":pick: Coal", "Level: " + skyblockCollectionTiers.getCoal()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCoal()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Coal", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Cobble Stone", "Level: " + skyblockCollectionTiers.getCobblestone()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getCobblestone()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Cobble Stone", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Diamond", "Level: " + skyblockCollectionTiers.getDiamond()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getDiamond()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Diamond", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Emerald", "Level: " + skyblockCollectionTiers.getEmerald()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEmerald()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Emerald", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Endstone", "Level: " + skyblockCollectionTiers.getEnderStone()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEnderStone()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Endstone", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Glowstone Dust", "Level: " + skyblockCollectionTiers.getGlowstoneDust()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGlowstoneDust()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Glowstone Dust", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Gold", "Level: " + skyblockCollectionTiers.getGoldIngot()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGoldIngot()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Gold", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Gravel", "Level: " + skyblockCollectionTiers.getGravel()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGravel()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Gravel", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Ice", "Level: " + skyblockCollectionTiers.getIce()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getIce()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Ice", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Iron", "Level: " + skyblockCollectionTiers.getIronIngot()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getIronIngot()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Iron", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Netherrack", "Level: " + skyblockCollectionTiers.getNetherrack()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getNetherrack()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Netherrack", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Nether Quartz", "Level: " + skyblockCollectionTiers.getQuartz()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getQuartz()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Nether Quartz", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Obsidian", "Level: " + skyblockCollectionTiers.getObsidian()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getObsidian()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Obsidian", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Redstone", "Level: " + skyblockCollectionTiers.getRedstone()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRedstone()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Redstone", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":pick: Sand", "Level: " + skyblockCollectionTiers.getSand()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSand()), true);
-        } catch (Exception e) {
-            eb.addField(":pick: Sand", "Player has not progressed in this collection.", true);
+        List<Collection> collections = new ArrayList<>();
+        collections.add(new Collection(skyblockCollectionTiers.getCoal(), skyblockCollectionExp.getCoal(),
+                ":pick: Coal"));
+        collections.add(new Collection(skyblockCollectionTiers.getCobblestone(), skyblockCollectionExp.getCobblestone(),
+                ":pick: Cobblestone"));
+        collections.add(new Collection(skyblockCollectionTiers.getDiamond(), skyblockCollectionExp.getDiamond(),
+                ":pick: Diamond"));
+        collections.add(new Collection(skyblockCollectionTiers.getEmerald(), skyblockCollectionExp.getEmerald(),
+                ":pick: Emerald"));
+        collections.add(new Collection(skyblockCollectionTiers.getEnderStone(), skyblockCollectionExp.getEnderStone(),
+                ":pick: Endstone"));
+        collections.add(new Collection(skyblockCollectionTiers.getGlowstoneDust(), skyblockCollectionExp.getGlowstoneDust(),
+                ":pick: Glowstone Dust"));
+        collections.add(new Collection(skyblockCollectionTiers.getGoldIngot(), skyblockCollectionExp.getGoldIngot(),
+                ":pick: Gold"));
+        collections.add(new Collection(skyblockCollectionTiers.getGravel(), skyblockCollectionExp.getGravel(),
+                ":pick: Gravel"));
+        collections.add(new Collection(skyblockCollectionTiers.getIce(), skyblockCollectionExp.getIce(),
+                ":pick: Ice"));
+        collections.add(new Collection(skyblockCollectionTiers.getIronIngot(), skyblockCollectionExp.getIronIngot(),
+                ":pick: Iron"));
+        collections.add(new Collection(skyblockCollectionTiers.getNetherrack(), skyblockCollectionExp.getNetherrack(),
+                ":pick: Netherrack"));
+        collections.add(new Collection(skyblockCollectionTiers.getQuartz(), skyblockCollectionExp.getQuartz(),
+                ":pick: Nether Quartz"));
+        collections.add(new Collection(skyblockCollectionTiers.getObsidian(), skyblockCollectionExp.getObsidian(),
+                ":pick: Obsidian"));
+        collections.add(new Collection(skyblockCollectionTiers.getRedstone(), skyblockCollectionExp.getRedstone(),
+                ":pick: Redstone"));
+        collections.add(new Collection(skyblockCollectionTiers.getSand(), skyblockCollectionExp.getSand(),
+                ":pick: Sand"));
+
+        for (Collection collection : collections) {
+            eb.addField(collection.getCompletedString());
         }
 
         eb.setFooter(addDatedFooter(event));
