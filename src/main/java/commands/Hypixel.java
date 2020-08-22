@@ -790,65 +790,30 @@ public class Hypixel extends ListenerAdapter {
         eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
         eb.setTitle(":video_game: " + playerName + "'s Fishing Collection :video_game:");
 
-        try {
-            eb.addField(":fishing_pole_and_fish: Clay", "Level: " + skyblockCollectionTiers.getClayBall()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getClayBall()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Clay", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Clown Fish", "Level: " + skyblockCollectionTiers.getRawFish2()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish2()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Clown Fish", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Inc Sack", "Level: " + skyblockCollectionTiers.getInkSack()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getInkSack()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Inc Sack", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Lily Pad", "Level: " + skyblockCollectionTiers.getWaterLily()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getWaterLily()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Lily Pad", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Raw Fish", "Level: " + skyblockCollectionTiers.getRawFish()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Raw Fish", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Raw Salmon", "Level: " + skyblockCollectionTiers.getRawFish1()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish1()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Raw Salmon", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Prismarine Crystals", "Level: " + skyblockCollectionTiers.getPrismarineCrystals()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPrismarineCrystals()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Prismarine Crystals", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Prismarine Shard", "Level: " + skyblockCollectionTiers.getPrismarineShard()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getPrismarineShard()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Prismarine Shard", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Puffer Fish", "Level: " + skyblockCollectionTiers.getRawFish3()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRawFish3()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Puffer Fish", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":fishing_pole_and_fish: Sponge", "Level: " + skyblockCollectionTiers.getSponge()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSponge()), true);
-        } catch (Exception e) {
-            eb.addField(":fishing_pole_and_fish: Sponge", "Player has not progressed in this collection.", true);
+        List<Collection> collections = new ArrayList<>();
+        collections.add(new Collection(skyblockCollectionTiers.getClayBall(), skyblockCollectionExp.getClayBall(),
+                ":fishing_pole_and_fish: Clay"));
+        collections.add(new Collection(skyblockCollectionTiers.getRawFish2(), skyblockCollectionExp.getRawFish2(),
+                ":fishing_pole_and_fish: Clown Fish"));
+        collections.add(new Collection(skyblockCollectionTiers.getInkSack(), skyblockCollectionExp.getInkSack(),
+                ":fishing_pole_and_fish: Ink Sack"));
+        collections.add(new Collection(skyblockCollectionTiers.getWaterLily(), skyblockCollectionExp.getWaterLily(),
+                ":fishing_pole_and_fish: Lily Pad"));
+        collections.add(new Collection(skyblockCollectionTiers.getRawFish(), skyblockCollectionExp.getRawFish(),
+                ":fishing_pole_and_fish: Raw Fish"));
+        collections.add(new Collection(skyblockCollectionTiers.getRawFish1(), skyblockCollectionExp.getRawFish1(),
+                ":fishing_pole_and_fish: Raw Salmon"));
+        collections.add(new Collection(skyblockCollectionTiers.getPrismarineCrystals(), skyblockCollectionExp.getPrismarineCrystals(),
+                ":fishing_pole_and_fish: Prismarine Crystal"));
+        collections.add(new Collection(skyblockCollectionTiers.getPrismarineShard(), skyblockCollectionExp.getPrismarineShard(),
+                ":fishing_pole_and_fish: Prismarine Shard"));
+        collections.add(new Collection(skyblockCollectionTiers.getRawFish3(), skyblockCollectionExp.getRawFish3(),
+                ":fishing_pole_and_fish: Puffer Fish"));
+        collections.add(new Collection(skyblockCollectionTiers.getSponge(), skyblockCollectionExp.getSponge(),
+                ":fishing_pole_and_fish: Sponge"));
+
+        for (Collection collection : collections) {
+            eb.addField(collection.getCompletedString());
         }
 
         eb.setFooter(addDatedFooter(event));
