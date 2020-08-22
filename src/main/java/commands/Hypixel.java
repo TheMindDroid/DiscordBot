@@ -716,59 +716,32 @@ public class Hypixel extends ListenerAdapter {
         eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
         eb.setTitle(":video_game: " + playerName + "'s Combat Collection :video_game:");
 
-        try {
-            eb.addField(":crossed_swords: Blaze Rod", "Level: " + skyblockCollectionTiers.getBlazeRod()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getBlazeRod()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Blaze Rod", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Bone", "Level: " + skyblockCollectionTiers.getBone()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getBone()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Bone", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Ender Pearl", "Level: " + skyblockCollectionTiers.getEnderpearl()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getEnderpearl()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Ender Pearl", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Ghast Tear", "Level: " + skyblockCollectionTiers.getGhastTear()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getGhastTear()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Ghast Tear", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Magma Cream", "Level: " + skyblockCollectionTiers.getMagmaCream()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getMagmaCream()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Magma Cream", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Rotten Flesh", "Level: " + skyblockCollectionTiers.getRottenFlesh()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getRottenFlesh()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Rotten Flesh", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Slimeball", "Level: " + skyblockCollectionTiers.getSlimeBall()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSlimeBall()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Slimeball", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: Spider Eye", "Level: " + skyblockCollectionTiers.getSpiderEye()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getSpiderEye()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: Spider Eye", "Player has not progressed in this collection.", true);
-        }
-        try {
-            eb.addField(":crossed_swords: String", "Level: " + skyblockCollectionTiers.getString()
-                    + "\nExperience: " + addCommas(skyblockCollectionExp.getString()), true);
-        } catch (Exception e) {
-            eb.addField(":crossed_swords: String", "Player has not progressed in this collection.", true);
+        List<Collection> collections = new ArrayList<>();
+        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
+                ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(skyblockCollectionTiers.getBone(), skyblockCollectionExp.getBone(),
+                ":crossed_swords: Bone"));
+        collections.add(new Collection(skyblockCollectionTiers.getEnderpearl(), skyblockCollectionExp.getEnderpearl(),
+                ":crossed_swords: Ender Pearl"));
+        collections.add(new Collection(skyblockCollectionTiers.getGhastTear(), skyblockCollectionExp.getGhastTear(),
+                ":crossed_swords: Ghast Tear"));
+        collections.add(new Collection(skyblockCollectionTiers.getMagmaCream(), skyblockCollectionExp.getMagmaCream(),
+                ":crossed_swords: Magma Cream"));
+        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
+                ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(skyblockCollectionTiers.getRottenFlesh(), skyblockCollectionExp.getRottenFlesh(),
+                ":crossed_swords: Rotten Flesh"));
+        collections.add(new Collection(skyblockCollectionTiers.getSlimeBall(), skyblockCollectionExp.getSlimeBall(),
+                ":crossed_swords: Slime Ball"));
+        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
+                ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(skyblockCollectionTiers.getSpiderEye(), skyblockCollectionExp.getSpiderEye(),
+                ":crossed_swords: Spider Eye"));
+        collections.add(new Collection(skyblockCollectionTiers.getString(), skyblockCollectionExp.getString(),
+                ":crossed_swords: String"));
+
+        for (Collection collection : collections) {
+            eb.addField(collection.getCompletedString());
         }
 
         eb.setFooter(addDatedFooter(event));
