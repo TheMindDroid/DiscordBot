@@ -606,8 +606,7 @@ public class Hypixel extends ListenerAdapter {
 
 
     //Returns farming collection data.
-    public static void getFarmingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
-                                            SkyblockCollection skyblockCollectionExp, String playerName) {
+    public static void getFarmingCollection(GuildMessageReceivedEvent event, SkyblockCollection tiers, SkyblockCollection exp, String playerName) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.GREEN);
 
@@ -615,38 +614,22 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Farming Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getCactus(), skyblockCollectionExp.getCactus(),
-                ":tractor: Cactus"));
-        collections.add(new Collection(skyblockCollectionTiers.getCarrotItem(), skyblockCollectionExp.getCarrotItem(),
-                ":tractor: Carrot"));
-        collections.add(new Collection(skyblockCollectionTiers.getRawChicken(), skyblockCollectionExp.getRawChicken(),
-                ":tractor: Chicken"));
-        collections.add(new Collection(skyblockCollectionTiers.getFeather(), skyblockCollectionExp.getFeather(),
-                ":tractor: Feather"));
-        collections.add(new Collection(skyblockCollectionTiers.getLeather(), skyblockCollectionExp.getLeather(),
-                ":tractor: Leather"));
-        collections.add(new Collection(skyblockCollectionTiers.getMelon(), skyblockCollectionExp.getMelon(),
-                ":tractor: Melon"));
-        collections.add(new Collection(skyblockCollectionTiers.getMushroomCollection(), skyblockCollectionExp.getMushroomCollection(),
-                ":tractor: Mushroom"));
-        collections.add(new Collection(skyblockCollectionTiers.getMutton(), skyblockCollectionExp.getMutton(),
-                ":tractor: Mutton"));
-        collections.add(new Collection(skyblockCollectionTiers.getNetherStalk(), skyblockCollectionExp.getNetherStalk(),
-                ":tractor: Nether Wart"));
-        collections.add(new Collection(skyblockCollectionTiers.getPork(), skyblockCollectionExp.getPork(),
-                ":tractor: Pork Chop"));
-        collections.add(new Collection(skyblockCollectionTiers.getPotatoItem(), skyblockCollectionExp.getPotatoItem(),
-                ":tractor: Potato"));
-        collections.add(new Collection(skyblockCollectionTiers.getPumpkin(), skyblockCollectionExp.getPumpkin(),
-                ":tractor: Pumpkin"));
-        collections.add(new Collection(skyblockCollectionTiers.getRabbit(), skyblockCollectionExp.getRabbit(),
-                ":tractor: Rabbit"));
-        collections.add(new Collection(skyblockCollectionTiers.getSeeds(), skyblockCollectionExp.getSeeds(),
-                ":tractor: Seeds"));
-        collections.add(new Collection(skyblockCollectionTiers.getSugarCane(), skyblockCollectionExp.getSugarCane(),
-                ":tractor: Sugar Cane"));
-        collections.add(new Collection(skyblockCollectionTiers.getWheat(), skyblockCollectionExp.getWheat(),
-                ":tractor: Wheat"));
+        collections.add(new Collection(tiers.getCactus(), exp.getCactus(), ":tractor: Cactus"));
+        collections.add(new Collection(tiers.getCarrotItem(), exp.getCarrotItem(), ":tractor: Carrot"));
+        collections.add(new Collection(tiers.getRawChicken(), exp.getRawChicken(), ":tractor: Chicken"));
+        collections.add(new Collection(tiers.getFeather(), exp.getFeather(), ":tractor: Feather"));
+        collections.add(new Collection(tiers.getLeather(), exp.getLeather(), ":tractor: Leather"));
+        collections.add(new Collection(tiers.getMelon(), exp.getMelon(), ":tractor: Melon"));
+        collections.add(new Collection(tiers.getMushroomCollection(), exp.getMushroomCollection(), ":tractor: Mushroom"));
+        collections.add(new Collection(tiers.getMutton(), exp.getMutton(), ":tractor: Mutton"));
+        collections.add(new Collection(tiers.getNetherStalk(), exp.getNetherStalk(), ":tractor: Nether Wart"));
+        collections.add(new Collection(tiers.getPork(), exp.getPork(), ":tractor: Pork Chop"));
+        collections.add(new Collection(tiers.getPotatoItem(), exp.getPotatoItem(), ":tractor: Potato"));
+        collections.add(new Collection(tiers.getPumpkin(), exp.getPumpkin(), ":tractor: Pumpkin"));
+        collections.add(new Collection(tiers.getRabbit(), exp.getRabbit(), ":tractor: Rabbit"));
+        collections.add(new Collection(tiers.getSeeds(), exp.getSeeds(), ":tractor: Seeds"));
+        collections.add(new Collection(tiers.getSugarCane(), exp.getSugarCane(), ":tractor: Sugar Cane"));
+        collections.add(new Collection(tiers.getWheat(), exp.getWheat(), ":tractor: Wheat"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());
@@ -658,8 +641,7 @@ public class Hypixel extends ListenerAdapter {
 
 
     //Returns mining collection data.
-    public static void getMiningCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
-                                           SkyblockCollection skyblockCollectionExp, String playerName) {
+    public static void getMiningCollection(GuildMessageReceivedEvent event, SkyblockCollection tiers, SkyblockCollection exp, String playerName) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.GREEN);
 
@@ -667,36 +649,21 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Mining Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getCoal(), skyblockCollectionExp.getCoal(),
-                ":pick: Coal"));
-        collections.add(new Collection(skyblockCollectionTiers.getCobblestone(), skyblockCollectionExp.getCobblestone(),
-                ":pick: Cobblestone"));
-        collections.add(new Collection(skyblockCollectionTiers.getDiamond(), skyblockCollectionExp.getDiamond(),
-                ":pick: Diamond"));
-        collections.add(new Collection(skyblockCollectionTiers.getEmerald(), skyblockCollectionExp.getEmerald(),
-                ":pick: Emerald"));
-        collections.add(new Collection(skyblockCollectionTiers.getEnderStone(), skyblockCollectionExp.getEnderStone(),
-                ":pick: Endstone"));
-        collections.add(new Collection(skyblockCollectionTiers.getGlowstoneDust(), skyblockCollectionExp.getGlowstoneDust(),
-                ":pick: Glowstone Dust"));
-        collections.add(new Collection(skyblockCollectionTiers.getGoldIngot(), skyblockCollectionExp.getGoldIngot(),
-                ":pick: Gold"));
-        collections.add(new Collection(skyblockCollectionTiers.getGravel(), skyblockCollectionExp.getGravel(),
-                ":pick: Gravel"));
-        collections.add(new Collection(skyblockCollectionTiers.getIce(), skyblockCollectionExp.getIce(),
-                ":pick: Ice"));
-        collections.add(new Collection(skyblockCollectionTiers.getIronIngot(), skyblockCollectionExp.getIronIngot(),
-                ":pick: Iron"));
-        collections.add(new Collection(skyblockCollectionTiers.getNetherrack(), skyblockCollectionExp.getNetherrack(),
-                ":pick: Netherrack"));
-        collections.add(new Collection(skyblockCollectionTiers.getQuartz(), skyblockCollectionExp.getQuartz(),
-                ":pick: Nether Quartz"));
-        collections.add(new Collection(skyblockCollectionTiers.getObsidian(), skyblockCollectionExp.getObsidian(),
-                ":pick: Obsidian"));
-        collections.add(new Collection(skyblockCollectionTiers.getRedstone(), skyblockCollectionExp.getRedstone(),
-                ":pick: Redstone"));
-        collections.add(new Collection(skyblockCollectionTiers.getSand(), skyblockCollectionExp.getSand(),
-                ":pick: Sand"));
+        collections.add(new Collection(tiers.getCoal(), exp.getCoal(), ":pick: Coal"));
+        collections.add(new Collection(tiers.getCobblestone(), exp.getCobblestone(), ":pick: Cobblestone"));
+        collections.add(new Collection(tiers.getDiamond(), exp.getDiamond(), ":pick: Diamond"));
+        collections.add(new Collection(tiers.getEmerald(), exp.getEmerald(), ":pick: Emerald"));
+        collections.add(new Collection(tiers.getEnderStone(), exp.getEnderStone(), ":pick: Endstone"));
+        collections.add(new Collection(tiers.getGlowstoneDust(), exp.getGlowstoneDust(), ":pick: Glowstone Dust"));
+        collections.add(new Collection(tiers.getGoldIngot(), exp.getGoldIngot(), ":pick: Gold"));
+        collections.add(new Collection(tiers.getGravel(), exp.getGravel(), ":pick: Gravel"));
+        collections.add(new Collection(tiers.getIce(), exp.getIce(), ":pick: Ice"));
+        collections.add(new Collection(tiers.getIronIngot(), exp.getIronIngot(), ":pick: Iron"));
+        collections.add(new Collection(tiers.getNetherrack(), exp.getNetherrack(), ":pick: Netherrack"));
+        collections.add(new Collection(tiers.getQuartz(), exp.getQuartz(), ":pick: Nether Quartz"));
+        collections.add(new Collection(tiers.getObsidian(), exp.getObsidian(), ":pick: Obsidian"));
+        collections.add(new Collection(tiers.getRedstone(), exp.getRedstone(), ":pick: Redstone"));
+        collections.add(new Collection(tiers.getSand(), exp.getSand(), ":pick: Sand"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());
@@ -708,8 +675,7 @@ public class Hypixel extends ListenerAdapter {
 
 
     //Returns combat collection data.
-    public static void getCombatCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
-                                           SkyblockCollection skyblockCollectionExp, String playerName) {
+    public static void getCombatCollection(GuildMessageReceivedEvent event, SkyblockCollection tiers, SkyblockCollection exp, String playerName) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.GREEN);
 
@@ -717,28 +683,17 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Combat Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
-                ":crossed_swords: Blaze Rod"));
-        collections.add(new Collection(skyblockCollectionTiers.getBone(), skyblockCollectionExp.getBone(),
-                ":crossed_swords: Bone"));
-        collections.add(new Collection(skyblockCollectionTiers.getEnderpearl(), skyblockCollectionExp.getEnderpearl(),
-                ":crossed_swords: Ender Pearl"));
-        collections.add(new Collection(skyblockCollectionTiers.getGhastTear(), skyblockCollectionExp.getGhastTear(),
-                ":crossed_swords: Ghast Tear"));
-        collections.add(new Collection(skyblockCollectionTiers.getMagmaCream(), skyblockCollectionExp.getMagmaCream(),
-                ":crossed_swords: Magma Cream"));
-        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
-                ":crossed_swords: Blaze Rod"));
-        collections.add(new Collection(skyblockCollectionTiers.getRottenFlesh(), skyblockCollectionExp.getRottenFlesh(),
-                ":crossed_swords: Rotten Flesh"));
-        collections.add(new Collection(skyblockCollectionTiers.getSlimeBall(), skyblockCollectionExp.getSlimeBall(),
-                ":crossed_swords: Slime Ball"));
-        collections.add(new Collection(skyblockCollectionTiers.getBlazeRod(), skyblockCollectionExp.getBlazeRod(),
-                ":crossed_swords: Blaze Rod"));
-        collections.add(new Collection(skyblockCollectionTiers.getSpiderEye(), skyblockCollectionExp.getSpiderEye(),
-                ":crossed_swords: Spider Eye"));
-        collections.add(new Collection(skyblockCollectionTiers.getString(), skyblockCollectionExp.getString(),
-                ":crossed_swords: String"));
+        collections.add(new Collection(tiers.getBlazeRod(), exp.getBlazeRod(), ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(tiers.getBone(), exp.getBone(), ":crossed_swords: Bone"));
+        collections.add(new Collection(tiers.getEnderpearl(), exp.getEnderpearl(), ":crossed_swords: Ender Pearl"));
+        collections.add(new Collection(tiers.getGhastTear(), exp.getGhastTear(), ":crossed_swords: Ghast Tear"));
+        collections.add(new Collection(tiers.getMagmaCream(), exp.getMagmaCream(), ":crossed_swords: Magma Cream"));
+        collections.add(new Collection(tiers.getBlazeRod(), exp.getBlazeRod(), ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(tiers.getRottenFlesh(), exp.getRottenFlesh(), ":crossed_swords: Rotten Flesh"));
+        collections.add(new Collection(tiers.getSlimeBall(), exp.getSlimeBall(), ":crossed_swords: Slime Ball"));
+        collections.add(new Collection(tiers.getBlazeRod(), exp.getBlazeRod(), ":crossed_swords: Blaze Rod"));
+        collections.add(new Collection(tiers.getSpiderEye(), exp.getSpiderEye(), ":crossed_swords: Spider Eye"));
+        collections.add(new Collection(tiers.getString(), exp.getString(), ":crossed_swords: String"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());
@@ -750,8 +705,7 @@ public class Hypixel extends ListenerAdapter {
 
 
     //Returns foraging collection data.
-    public static void getForagingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
-                                             SkyblockCollection skyblockCollectionExp, String playerName) {
+    public static void getForagingCollection(GuildMessageReceivedEvent event, SkyblockCollection tiers, SkyblockCollection exp, String playerName) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.GREEN);
 
@@ -759,18 +713,12 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Foraging Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getLog_2(), skyblockCollectionExp.getLog_2(),
-                ":evergreen_tree: Acacia Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog2(), skyblockCollectionExp.getLog2(),
-                ":evergreen_tree: Birch Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog_21(), skyblockCollectionExp.getLog_21(),
-                ":evergreen_tree: Dark Oak Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog(), skyblockCollectionExp.getLog(),
-                ":evergreen_tree: Oak Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog3(), skyblockCollectionExp.getLog3(),
-                ":evergreen_tree: Jungle Wood"));
-        collections.add(new Collection(skyblockCollectionTiers.getLog1(), skyblockCollectionExp.getLog1(),
-                ":evergreen_tree: Spruce Wood"));
+        collections.add(new Collection(tiers.getLog_2(), exp.getLog_2(), ":evergreen_tree: Acacia Wood"));
+        collections.add(new Collection(tiers.getLog2(), exp.getLog2(), ":evergreen_tree: Birch Wood"));
+        collections.add(new Collection(tiers.getLog_21(), exp.getLog_21(), ":evergreen_tree: Dark Oak Wood"));
+        collections.add(new Collection(tiers.getLog(), exp.getLog(), ":evergreen_tree: Oak Wood"));
+        collections.add(new Collection(tiers.getLog3(), exp.getLog3(), ":evergreen_tree: Jungle Wood"));
+        collections.add(new Collection(tiers.getLog1(), exp.getLog1(), ":evergreen_tree: Spruce Wood"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());
@@ -782,8 +730,7 @@ public class Hypixel extends ListenerAdapter {
 
 
     //Returns fishing collection data.
-    public static void getFishingCollection(GuildMessageReceivedEvent event, SkyblockCollection skyblockCollectionTiers,
-                                            SkyblockCollection skyblockCollectionExp, String playerName) {
+    public static void getFishingCollection(GuildMessageReceivedEvent event, SkyblockCollection tiers, SkyblockCollection exp, String playerName) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.GREEN);
 
@@ -791,26 +738,16 @@ public class Hypixel extends ListenerAdapter {
         eb.setTitle(":video_game: " + playerName + "'s Fishing Collection :video_game:");
 
         List<Collection> collections = new ArrayList<>();
-        collections.add(new Collection(skyblockCollectionTiers.getClayBall(), skyblockCollectionExp.getClayBall(),
-                ":fishing_pole_and_fish: Clay"));
-        collections.add(new Collection(skyblockCollectionTiers.getRawFish2(), skyblockCollectionExp.getRawFish2(),
-                ":fishing_pole_and_fish: Clown Fish"));
-        collections.add(new Collection(skyblockCollectionTiers.getInkSack(), skyblockCollectionExp.getInkSack(),
-                ":fishing_pole_and_fish: Ink Sack"));
-        collections.add(new Collection(skyblockCollectionTiers.getWaterLily(), skyblockCollectionExp.getWaterLily(),
-                ":fishing_pole_and_fish: Lily Pad"));
-        collections.add(new Collection(skyblockCollectionTiers.getRawFish(), skyblockCollectionExp.getRawFish(),
-                ":fishing_pole_and_fish: Raw Fish"));
-        collections.add(new Collection(skyblockCollectionTiers.getRawFish1(), skyblockCollectionExp.getRawFish1(),
-                ":fishing_pole_and_fish: Raw Salmon"));
-        collections.add(new Collection(skyblockCollectionTiers.getPrismarineCrystals(), skyblockCollectionExp.getPrismarineCrystals(),
-                ":fishing_pole_and_fish: Prismarine Crystal"));
-        collections.add(new Collection(skyblockCollectionTiers.getPrismarineShard(), skyblockCollectionExp.getPrismarineShard(),
-                ":fishing_pole_and_fish: Prismarine Shard"));
-        collections.add(new Collection(skyblockCollectionTiers.getRawFish3(), skyblockCollectionExp.getRawFish3(),
-                ":fishing_pole_and_fish: Puffer Fish"));
-        collections.add(new Collection(skyblockCollectionTiers.getSponge(), skyblockCollectionExp.getSponge(),
-                ":fishing_pole_and_fish: Sponge"));
+        collections.add(new Collection(tiers.getClayBall(), exp.getClayBall(), ":fishing_pole_and_fish: Clay"));
+        collections.add(new Collection(tiers.getRawFish2(), exp.getRawFish2(), ":fishing_pole_and_fish: Clown Fish"));
+        collections.add(new Collection(tiers.getInkSack(), exp.getInkSack(), ":fishing_pole_and_fish: Ink Sack"));
+        collections.add(new Collection(tiers.getWaterLily(), exp.getWaterLily(), ":fishing_pole_and_fish: Lily Pad"));
+        collections.add(new Collection(tiers.getRawFish(), exp.getRawFish(), ":fishing_pole_and_fish: Raw Fish"));
+        collections.add(new Collection(tiers.getRawFish1(), exp.getRawFish1(), ":fishing_pole_and_fish: Raw Salmon"));
+        collections.add(new Collection(tiers.getPrismarineCrystals(), exp.getPrismarineCrystals(), ":fishing_pole_and_fish: Prismarine Crystal"));
+        collections.add(new Collection(tiers.getPrismarineShard(), exp.getPrismarineShard(), ":fishing_pole_and_fish: Prismarine Shard"));
+        collections.add(new Collection(tiers.getRawFish3(), exp.getRawFish3(), ":fishing_pole_and_fish: Puffer Fish"));
+        collections.add(new Collection(tiers.getSponge(), exp.getSponge(), ":fishing_pole_and_fish: Sponge"));
 
         for (Collection collection : collections) {
             eb.addField(collection.getCompletedString());

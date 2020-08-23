@@ -7,28 +7,25 @@ import java.text.DecimalFormat;
 
 public class Collection {
 
-    private int skyblockCollectionTiers;
-    private int skyblockCollectionExp;
-    private String collectionName;
+    private int tiers;
+    private final int exp;
+    private final String collectionName;
 
-    public Collection(int skyblockCollectionTiers, int skyblockCollectionExp, String collectionName) {
-        this.skyblockCollectionTiers = skyblockCollectionTiers;
-        this.skyblockCollectionExp = skyblockCollectionExp;
+    public Collection(int tiers, int exp, String collectionName) {
+        this.tiers = tiers;
+        this.exp = exp;
         this.collectionName = collectionName;
 
-        if (skyblockCollectionTiers == -1) {
-            this.skyblockCollectionTiers *= -1;
+        if (tiers == -1) {
+            this.tiers *= -1;
         }
     }
 
     public MessageEmbed.Field getCompletedString() {
-
-        return new MessageEmbed.Field(collectionName, "Level: " + skyblockCollectionTiers + "\nExperience: "
-                + addCommas(skyblockCollectionExp), true);
+        return new MessageEmbed.Field(collectionName, "Level: " + tiers + "\nExperience: " + addCommas(exp), true);
     }
 
     public static String addCommas(double withoutCommas) {
-
         DecimalFormat decimalFormat = new DecimalFormat(",###");
         decimalFormat.setGroupingUsed(true);
         decimalFormat.setGroupingSize(3);
