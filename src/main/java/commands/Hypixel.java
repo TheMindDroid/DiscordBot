@@ -3,6 +3,7 @@
 package commands;
 
 import commands.HypixelClasses.Collection;
+import commands.HypixelClasses.Minions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -115,7 +116,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField("Offline Players: :red_circle:", offline.toString(), true);
 
             //Calls guild experience.
-            eb.addField(":chart_with_upwards_trend: Guild Level", "Level: " + guild.getLevel()
+            eb.addField(":chart_with_upwards_trend: Guild Level:", "Level: " + guild.getLevel()
                     + " \nExperience: " + addCommas(guild.getExp()), true);
 
             eb.setFooter(addDatedFooter(event));
@@ -448,111 +449,33 @@ public class Hypixel extends ListenerAdapter {
             eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
             eb.setTitle(":video_game: " + playerName + "'s Minions :video_game:");
 
-            try {
-                eb.addField(":evergreen_tree: Acacia Minion", "Level: " + skyblockMinions.getAcacia(), true);
-            } catch (Exception e) {
-                eb.addField(":evergreen_tree: Acacia Minion", "Player has not unlocked this minion.", true);
+            List<Minions> minions = new ArrayList<>();
+            minions.add(new Minions(":evergreen_tree: Acacia Minion", skyblockMinions.getAcacia()));
+            minions.add(new Minions(":evergreen_tree: Birch Minion", skyblockMinions.getBirch()));
+            minions.add(new Minions(":tractor: Cactus Minion", skyblockMinions.getCactus()));
+            minions.add(new Minions(":pick: Cobblestone Minion", skyblockMinions.getCobblestone()));
+            minions.add(new Minions(":tractor: Cocoa Minion", skyblockMinions.getCocoa()));
+            minions.add(new Minions(":crossed_swords: Cow Minion", skyblockMinions.getCow()));
+            minions.add(new Minions(":evergreen_tree: Dark Oak Minion", skyblockMinions.getDarkOak()));
+            minions.add(new Minions(":pick: End Stone Minion", skyblockMinions.getEnderStone()));
+            minions.add(new Minions(":crossed_swords: Ghast Minion", skyblockMinions.getGhast()));
+            minions.add(new Minions(":pick: Gold Minion", skyblockMinions.getGold()));
+            minions.add(new Minions(":pick: Gravel Minion", skyblockMinions.getGravel()));
+            minions.add(new Minions(":evergreen_tree: Jungle Minion", skyblockMinions.getJungle()));
+            minions.add(new Minions(":tractor: Melon Minion", skyblockMinions.getMelon()));
+            minions.add(new Minions(":tractor: Nether Warts Minion", skyblockMinions.getNetherWarts()));
+            minions.add(new Minions(":pick: Quartz Minion", skyblockMinions.getQuartz()));
+            minions.add(new Minions(":swords_crossed: Rabbit Minion", skyblockMinions.getRabbit()));
+            minions.add(new Minions(":crossed_swords: Revenant Minion", skyblockMinions.getRevenant()));
+            minions.add(new Minions(":pick: Snow Minion", skyblockMinions.getSnow()));
+            minions.add(new Minions(":evergreen_tree: Spruce Minion", skyblockMinions.getSpruce()));
+            minions.add(new Minions(":tractor: Sugar Cane Minion", skyblockMinions.getSugarCane()));
+            minions.add(new Minions(":tractor: Wheat Minion", skyblockMinions.getWheat()));
+
+            for (Minions minion : minions) {
+                eb.addField(minion.getCompletedString());
             }
-            try {
-                eb.addField(":evergreen_tree: Birch Minion", "Level: " + skyblockMinions.getBirch(), true);
-            } catch (Exception e) {
-                eb.addField(":evergreen_tree: Birch Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Cactus Minion", "Level: " + skyblockMinions.getCactus(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Cactus Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: Cobblestone Minion", "Level: " + skyblockMinions.getCobblestone(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: Cobblestone Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Cocoa Minion", "Level: " + skyblockMinions.getCocoa(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Cocoa Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":crossed_swords: Cow Minion", "Level: " + skyblockMinions.getCow(), true);
-            } catch (Exception e) {
-                eb.addField(":crossed_swords: Cow Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":evergreen_tree: Dark Oak Minion", "Level: " + skyblockMinions.getDarkOak(), true);
-            } catch (Exception e) {
-                eb.addField(":evergreen_tree: Dark Oak Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: End Stone Minion", "Level: " + skyblockMinions.getEnderStone(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: End Stone Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":crossed_swords: Ghast Minion", "Level: " + skyblockMinions.getGhast(), true);
-            } catch (Exception e) {
-                eb.addField(":crossed_swords: Ghast Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: Gold Minion", "Level: " + skyblockMinions.getGold(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: Gold Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: Gravel Minion", "Level: " + skyblockMinions.getGravel(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: Gravel Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":evergreen_tree: Jungle Minion", "Level: " + skyblockMinions.getJungle(), true);
-            } catch (Exception e) {
-                eb.addField(":evergreen_tree: Jungle Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Melon Minion", "Level: " + skyblockMinions.getMelon(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Melon Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Nether Warts Minion", "Level: " + skyblockMinions.getNetherWarts(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Nether Warts Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: Quartz Minion", "Level: " + skyblockMinions.getQuartz(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: Quartz Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":crossed_swords: Rabbit Minion", "Level: " + skyblockMinions.getRabbit(), true);
-            } catch (Exception e) {
-                eb.addField(":crossed_swords: Rabbit Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":crossed_swords: Revenant Minion", "Level: " + skyblockMinions.getRevenant(), true);
-            } catch (Exception e) {
-                eb.addField(":crossed_swords: Revenant Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":pick: Snow Minion", "Level: " + skyblockMinions.getSnow(), true);
-            } catch (Exception e) {
-                eb.addField(":pick: Snow Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":evergreen_tree: Spruce Minion", "Level: " + skyblockMinions.getSpruce(), true);
-            } catch (Exception e) {
-                eb.addField(":evergreen_tree: Spruce Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Sugar Cane Minion", "Level: " + skyblockMinions.getSugarCane(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Sugar Cane Minion", "Player has not unlocked this minion.", true);
-            }
-            try {
-                eb.addField(":tractor: Wheat Minion", "Level: " + skyblockMinions.getWheat(), true);
-            } catch (Exception e) {
-                eb.addField(":tractor: Wheat Minion", "Player has not unlocked this minion.", true);
-            }
+
             eb.setFooter(addDatedFooter(event));
 
             event.getChannel().sendMessage(eb.build()).queue();
