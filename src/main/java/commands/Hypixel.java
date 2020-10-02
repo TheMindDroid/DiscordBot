@@ -2,6 +2,7 @@
 
 package commands;
 
+import commands.HypixelClasses.ComputationalClasses.AddCommas;
 import commands.HypixelClasses.ComputationalClasses.AddDatedFooter;
 import commands.HypixelClasses.Collection;
 import commands.HypixelClasses.ComputationalClasses.ErrorMessage;
@@ -25,7 +26,6 @@ import zone.nora.slothpixel.skyblock.players.stats.auctions.SkyblockPlayerAuctio
 import zone.nora.slothpixel.skyblock.players.stats.kills.SkyblockPlayerKills;
 
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -120,7 +120,7 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls guild experience.
             eb.addField(":chart_with_upwards_trend: Guild Level:", "Level: " + guild.getLevel()
-                    + " \nExperience: " + addCommas(guild.getExp()), true);
+                    + " \nExperience: " + new AddCommas(guild.getExp()).addCommas(), true);
 
             eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
             event.getChannel().sendMessage(eb.build()).queue();
@@ -185,11 +185,12 @@ public class Hypixel extends ListenerAdapter {
 
             //Calls money in purse.
             if (hypixel.getSkyblockProfile(playerName).getBanking().getBalance() == 0) {
-                eb.addField(":moneybag: Money:","Purse: $" + addCommas(skyblockPlayer.getCoinPurse()), true);
+                eb.addField(":moneybag: Money:","Purse: $" + new AddCommas(skyblockPlayer.getCoinPurse()).addCommas(),
+                        true);
             } else {
                 eb.addField(":moneybag: Money:","Bank: $"
-                        + addCommas(hypixel.getSkyblockProfile(playerName).getBanking().getBalance())
-                        + "\nPurse: $" + addCommas(skyblockPlayer.getCoinPurse()), true);
+                        + new AddCommas(hypixel.getSkyblockProfile(playerName).getBanking().getBalance()).addCommas()
+                        + "\nPurse: $" + new AddCommas(skyblockPlayer.getCoinPurse()).addCommas(), true);
             }
 
             //Calls the armor the player is wearing.
@@ -220,8 +221,8 @@ public class Hypixel extends ListenerAdapter {
             try {
                 SkyblockPlayerAuctions skyblockPlayerAuctions = skyblockPlayer.getStats().getAuctions();
                 eb.addField(":chart_with_upwards_trend: Auction Stats:", "Money Spent: $"
-                        + addCommas(skyblockPlayerAuctions.getGoldSpent())
-                        + "\n Money Earned: $" + addCommas(skyblockPlayerAuctions.getGoldEarned())
+                        + new AddCommas(skyblockPlayerAuctions.getGoldSpent()).addCommas()
+                        + "\n Money Earned: $" + new AddCommas(skyblockPlayerAuctions.getGoldEarned()).addCommas()
                         + "\n Commons Sold: " + skyblockPlayerAuctions.getSold().getCommon()
                         + "\n Uncommons Sold: " + skyblockPlayerAuctions.getSold().getUncommon()
                         + "\n Rares Sold: " + skyblockPlayerAuctions.getSold().getRare()
@@ -234,9 +235,10 @@ public class Hypixel extends ListenerAdapter {
             //Calls combat statistics for the player.
             try {
                 eb.addField(":crossed_swords: Combat Statistics:", "Total Kills: "
-                        + addCommas(skyblockPlayer.getStats().getTotalKills())
-                        + "\nTotal Deaths: " + addCommas(skyblockPlayer.getStats().getTotalDeaths())
-                        + "\nHighest Crit Damage: " + addCommas(skyblockPlayer.getStats().getHighestCriticalDamage()), true);
+                        + new AddCommas(skyblockPlayer.getStats().getTotalKills()).addCommas()
+                        + "\nTotal Deaths: " + new AddCommas(skyblockPlayer.getStats().getTotalDeaths()).addCommas()
+                        + "\nHighest Crit Damage: " + new AddCommas(skyblockPlayer.getStats().getHighestCriticalDamage()).addCommas(),
+                        true);
             } catch (Exception e) {
                 eb.addField(":crossed_swords: Combat Statistics:", "Player does not have available combat statistics.", true);
             }
@@ -262,11 +264,11 @@ public class Hypixel extends ListenerAdapter {
                         + skyblockPlayerKills.getCarrotKing();
 
                 eb.addField(":fishing_pole_and_fish: Items Fished:", "Total Items: "
-                        + addCommas(skyblockPlayer.getStats().getItemsFished().getTotal())
-                        + "\nNormal Items: " + addCommas(skyblockPlayer.getStats().getItemsFished().getNormal())
-                        + "\nTreasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getTreasure())
-                        + "\nLarge Treasures Fished: " + addCommas(skyblockPlayer.getStats().getItemsFished().getLargeTreasure())
-                        + "\nSea Creatures Killed: " + addCommas(totalSeaCreatureKills), true);
+                        + new AddCommas(skyblockPlayer.getStats().getItemsFished().getTotal()).addCommas()
+                        + "\nNormal Items: " + new AddCommas(skyblockPlayer.getStats().getItemsFished().getNormal()).addCommas()
+                        + "\nTreasures Fished: " + new AddCommas(skyblockPlayer.getStats().getItemsFished().getTreasure()).addCommas()
+                        + "\nLarge Treasures Fished: " + new AddCommas(skyblockPlayer.getStats().getItemsFished().getLargeTreasure()).addCommas()
+                        + "\nSea Creatures Killed: " + new AddCommas(totalSeaCreatureKills).addCommas(), true);
             } catch (Exception e) {
                 eb.addField(":tropical_fish: Items Fished:", "Unable to retrieve fishing data.", true);
             }
@@ -700,13 +702,13 @@ public class Hypixel extends ListenerAdapter {
 
         if (skyblockSkill.getXpForNext() == 0) {
             sb.append("Skill Maxed.\n").append("Total Experience: ")
-                    .append(addCommas(Double.parseDouble(skyblockSkill.getXp())))
+                    .append(new AddCommas(Double.parseDouble(skyblockSkill.getXp())).addCommas())
                     .append("\n").append("100%\n").append(":green_square:".repeat(Math.max(0, 10)));
             return sb.toString();
         } else {
-            sb.append("Experience to next level: ").append(addCommas(skyblockSkill.getXpCurrent())).append(" / ")
-                    .append(addCommas(skyblockSkill.getXpForNext())).append("\n").append("Total Experience: ")
-                    .append(addCommas(Double.parseDouble(skyblockSkill.getXp()))).append("\n");
+            sb.append("Experience to next level: ").append(new AddCommas(skyblockSkill.getXpCurrent()).addCommas()).append(" / ")
+                    .append(new AddCommas(skyblockSkill.getXpForNext()).addCommas()).append("\n").append("Total Experience: ")
+                    .append(new AddCommas(Double.parseDouble(skyblockSkill.getXp())).addCommas()).append("\n");
             return sb + percentVisualizer(stringToPercent);
         }
     }
@@ -741,22 +743,11 @@ public class Hypixel extends ListenerAdapter {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Level: ").append(slayer.getClaimedLevels()).append("\n").append("Experience: ")
-                .append(addCommas(slayer.getXp())).append("\n");
+                .append(new AddCommas(slayer.getXp()).addCommas()).append("\n");
 
         slayer.getKillsTier().forEach( (level, kills) ->
                 sb.append("Level: ").append(level).append(" - ").append("Kills: ").append(kills).append("\n"));
 
         return sb.toString();
-    }
-
-
-    //Adds comma separators to large numbers.
-    public static String addCommas(double withoutCommas) {
-
-        DecimalFormat decimalFormat = new DecimalFormat(",###");
-        decimalFormat.setGroupingUsed(true);
-        decimalFormat.setGroupingSize(3);
-
-        return decimalFormat.format(withoutCommas);
     }
 }

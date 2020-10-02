@@ -25,7 +25,8 @@ public class Help extends ListenerAdapter {
             eb.addField("~help", "Displays this help message.", true);
             eb.addField("~hypixel", "Displays options for the Hypixel API.", true);
 
-            eb.setFooter("Request was made @ " + formatter.format(date) + " by " + Objects.requireNonNull(event.getMember()).getUser().getAsTag());
+            eb.setFooter("Request was made @ " + formatter.format(date) + " by " +
+                    Objects.requireNonNull(event.getMember()).getUser().getAsTag());
             event.getChannel().sendMessage(eb.build()).queue();
         }
     }

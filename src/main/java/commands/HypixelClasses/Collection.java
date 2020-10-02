@@ -1,9 +1,8 @@
 //Manages data for the Skyblock Collections.
 package commands.HypixelClasses;
 
+import commands.HypixelClasses.ComputationalClasses.AddCommas;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-
-import java.text.DecimalFormat;
 
 public class Collection {
 
@@ -22,14 +21,7 @@ public class Collection {
     }
 
     public MessageEmbed.Field getCompletedString() {
-        return new MessageEmbed.Field(collectionName, "Level: " + tiers + "\nExperience: " + addCommas(exp), true);
-    }
-
-    public static String addCommas(double withoutCommas) {
-        DecimalFormat decimalFormat = new DecimalFormat(",###");
-        decimalFormat.setGroupingUsed(true);
-        decimalFormat.setGroupingSize(3);
-
-        return decimalFormat.format(withoutCommas);
+        return new MessageEmbed.Field(collectionName, "Level: " + tiers + "\nExperience: " +
+                new AddCommas(exp), true);
     }
 }
