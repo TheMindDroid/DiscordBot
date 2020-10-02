@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class AddDatedFooter {
 
-    private String name;
+    private final String name;
 
     public AddDatedFooter(String name) {
         this.name = name;

@@ -4,6 +4,7 @@ package commands;
 
 import commands.HypixelClasses.AddDatedFooter;
 import commands.HypixelClasses.Collection;
+import commands.HypixelClasses.ErrorMessage;
 import commands.HypixelClasses.Minions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -39,8 +40,8 @@ public class Hypixel extends ListenerAdapter {
         }
 
         if (messageSentArray.length == 1) {
-            sendErrorMessage(event, "Invalid Arguments...",
-                    "Usage: ~hypixel [collections/minions/guild/skills/slayer/stats]", false);
+            new ErrorMessage(event, "Invalid Arguments...",
+                    "Usage: ~hypixel [collections/minions/guild/skills/slayer/stats]", false).sendErrorMessage();
             return;
         }
 
@@ -66,8 +67,9 @@ public class Hypixel extends ListenerAdapter {
                 getCollections(event, hypixel, messageSentArray);
                 break;
             default:
-                sendErrorMessage(event, "Invalid Arguments...",
-                        "Usage: ~hypixel [collections/minions/guild/stats/slayer/skills]", false);
+                new ErrorMessage(event, "Invalid Arguments...",
+                        "Usage: ~hypixel [collections/minions/guild/stats/slayer/skills]", false)
+                        .sendErrorMessage();
                 break;
         }
     }
@@ -123,7 +125,8 @@ public class Hypixel extends ListenerAdapter {
             eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
             event.getChannel().sendMessage(eb.build()).queue();
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to gather Guild information." , false);
+            new ErrorMessage(event, "API Unavailable", "Unable to gather Guild information." , false)
+                    .sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -132,8 +135,8 @@ public class Hypixel extends ListenerAdapter {
     public void getPlayerStatistic(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
 
         if (messageSentArray.length == 2) {
-            sendErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
-                    "Usage: ~hypixel stats <player>", false);
+            new ErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
+                    "Usage: ~hypixel stats <player>", false).sendErrorMessage();
             return;
         }
 
@@ -279,7 +282,7 @@ public class Hypixel extends ListenerAdapter {
             event.getChannel().sendMessage(eb.build()).queue();
 
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to retrieve player data.*", true);
+            new ErrorMessage(event, "API Unavailable", "Unable to retrieve player data.*", true).sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -288,8 +291,8 @@ public class Hypixel extends ListenerAdapter {
     public void getSlayerStats(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
 
         if (messageSentArray.length == 2) {
-            sendErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n"
-                    + "Usage: ~hypixel slayer <player>", false);
+            new ErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n"
+                    + "Usage: ~hypixel slayer <player>", false).sendErrorMessage();
             return;
         }
 
@@ -323,7 +326,8 @@ public class Hypixel extends ListenerAdapter {
             event.getChannel().sendMessage(eb.build()).queue();
 
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Slayer data.*", true);
+            new ErrorMessage(event, "API Unavailable", "Unable to retrieve Slayer data.*", true)
+                    .sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -332,8 +336,8 @@ public class Hypixel extends ListenerAdapter {
     public void getSkills(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
 
         if (messageSentArray.length == 2) {
-            sendErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
-                    "Usage: ~hypixel skills <player>", false);
+            new ErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
+                    "Usage: ~hypixel skills <player>", false).sendErrorMessage();
             return;
         }
 
@@ -426,7 +430,8 @@ public class Hypixel extends ListenerAdapter {
             event.getChannel().sendMessage(eb.build()).queue();
 
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Skills data.*", true);
+            new ErrorMessage(event, "API Unavailable", "Unable to retrieve Skills data.*", true)
+                    .sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -434,8 +439,8 @@ public class Hypixel extends ListenerAdapter {
 
     public void getMinions(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
         if (messageSentArray.length == 2) {
-            sendErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
-                    "Usage: ~hypixel minions <player>", false);
+            new ErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n" +
+                    "Usage: ~hypixel minions <player>", false).sendErrorMessage();
             return;
         }
 
@@ -481,7 +486,8 @@ public class Hypixel extends ListenerAdapter {
 
             event.getChannel().sendMessage(eb.build()).queue();
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true);
+            new ErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true)
+                    .sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -490,8 +496,9 @@ public class Hypixel extends ListenerAdapter {
     //Returns the collection stats of the player.
     public void getCollections(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
         if (messageSentArray.length == 2 || messageSentArray.length == 3) {
-            sendErrorMessage(event, "Invalid Arguments...",
-                    "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",true);
+            new ErrorMessage(event, "Invalid Arguments...",
+                    "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",true)
+                    .sendErrorMessage();
             return;
         }
 
@@ -518,12 +525,13 @@ public class Hypixel extends ListenerAdapter {
                     getFishingCollection(event, skyblockCollectionTiers, skyblockCollectionExp, playerName);
                     break;
                 default:
-                    sendErrorMessage(event, "Invalid Arguments...",
-                            "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",true);
+                    new ErrorMessage(event, "Invalid Arguments...",
+                            "Usage: ~hypixel collections <player> [combat/farming/fishing/foraging/mining]",
+                            true).sendErrorMessage();
                     break;
             }
         } catch (Exception e) {
-            sendErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true);
+            new ErrorMessage(event, "API Unavailable", "Unable to retrieve Minions data.*", true).sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -761,19 +769,5 @@ public class Hypixel extends ListenerAdapter {
         calendar.setTimeInMillis(millis);
 
         return formatter.format(date);
-    }
-
-
-    //Sends a formatted error message.
-    public void sendErrorMessage(GuildMessageReceivedEvent event, String errorType, String message, boolean footer) {
-
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(Color.RED);
-        eb.setTitle(":warning: Error :warning:");
-        eb.addField(errorType, message, true);
-        if (footer) {
-            eb.setFooter("*Player may not have a Skyblock profile or their API settings are disabled.");
-        }
-        event.getChannel().sendMessage(eb.build()).queue();
     }
 }
