@@ -8,6 +8,7 @@ import commands.HypixelClasses.Collection;
 import commands.HypixelClasses.ComputationalClasses.ErrorMessage;
 import commands.HypixelClasses.ComputationalClasses.MillisToDate;
 import commands.HypixelClasses.Minions;
+import commands.HypixelClasses.SlayerStats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -21,7 +22,6 @@ import zone.nora.slothpixel.skyblock.players.collection.SkyblockCollection;
 import zone.nora.slothpixel.skyblock.players.minions.SkyblockMinions;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkill;
 import zone.nora.slothpixel.skyblock.players.skills.SkyblockSkills;
-import zone.nora.slothpixel.skyblock.players.slayer.Slayer;
 import zone.nora.slothpixel.skyblock.players.stats.auctions.SkyblockPlayerAuctions;
 import zone.nora.slothpixel.skyblock.players.stats.kills.SkyblockPlayerKills;
 
@@ -55,7 +55,7 @@ public class Hypixel extends ListenerAdapter {
                 getPlayerStatistic(event, hypixel, messageSentArray);
                 break;
             case "slayer":
-                getSlayerStats(event, hypixel, messageSentArray);
+                new SlayerStats(event, hypixel, messageSentArray).getSlayerStats();
                 break;
             case "skills":
                 getSkills(event, hypixel, messageSentArray);
@@ -286,51 +286,6 @@ public class Hypixel extends ListenerAdapter {
 
         } catch (Exception e) {
             new ErrorMessage(event, "API Unavailable", "Unable to retrieve player data.*", true).sendErrorMessage();
-            event.getChannel().sendMessage("**Exception:** " + e).queue();
-        }
-    }
-
-
-    public void getSlayerStats(GuildMessageReceivedEvent event, Slothpixel hypixel, String[] messageSentArray) {
-
-        if (messageSentArray.length == 2) {
-            new ErrorMessage(event, "Invalid Arguments...", "Please provide a valid Hypixel player. \n"
-                    + "Usage: ~hypixel slayer <player>", false).sendErrorMessage();
-            return;
-        }
-
-        try {
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(Color.GREEN);
-
-            String playerName = messageSentArray[2];
-            Player player = hypixel.getPlayer(playerName);
-            SkyblockPlayer skyblockPlayer = hypixel.getSkyblockProfile(playerName).getMembers().get(player.getUuid());
-
-            //Sets user's MC profile picture.
-            eb.setImage("https://minotar.net/helm/" + playerName + "/100.png");
-            eb.setTitle(":video_game: " + playerName + "'s Slayers :video_game:");
-
-            Slayer zombie = skyblockPlayer.getSlayer().getZombie();
-            String zombieStats = unwrapSlayer(zombie);
-
-            Slayer spider = skyblockPlayer.getSlayer().getSpider();
-            String spiderStats = unwrapSlayer(spider);
-
-            Slayer wolf = skyblockPlayer.getSlayer().getWolf();
-            String wolfStats = unwrapSlayer(wolf);
-
-            eb.addField("Revenant Horror :zombie:", zombieStats, true);
-            eb.addField("Tarantula Broodfather :spider_web:", spiderStats, true);
-            eb.addField("Sven Packmaster :wolf:", wolfStats, true);
-
-            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
-
-            event.getChannel().sendMessage(eb.build()).queue();
-
-        } catch (Exception e) {
-            new ErrorMessage(event, "API Unavailable", "Unable to retrieve Slayer data.*", true)
-                    .sendErrorMessage();
             event.getChannel().sendMessage("**Exception:** " + e).queue();
         }
     }
@@ -732,21 +687,6 @@ public class Hypixel extends ListenerAdapter {
             sb.append(":yellow_square:");
             sb.append(":red_square:".repeat(Math.max(0, 9)));
         }
-
-        return sb.toString();
-    }
-
-
-    //Cycles through a map to gather Slayer data.
-    public static String unwrapSlayer(Slayer slayer) {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("Level: ").append(slayer.getClaimedLevels()).append("\n").append("Experience: ")
-                .append(new AddCommas(slayer.getXp()).addCommas()).append("\n");
-
-        slayer.getKillsTier().forEach( (level, kills) ->
-                sb.append("Level: ").append(level).append(" - ").append("Kills: ").append(kills).append("\n"));
 
         return sb.toString();
     }
