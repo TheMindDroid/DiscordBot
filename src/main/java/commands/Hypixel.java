@@ -2,9 +2,10 @@
 
 package commands;
 
-import commands.HypixelClasses.AddDatedFooter;
+import commands.HypixelClasses.ComputationalClasses.AddDatedFooter;
 import commands.HypixelClasses.Collection;
-import commands.HypixelClasses.ErrorMessage;
+import commands.HypixelClasses.ComputationalClasses.ErrorMessage;
+import commands.HypixelClasses.ComputationalClasses.MillisToDate;
 import commands.HypixelClasses.Minions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -25,7 +26,6 @@ import zone.nora.slothpixel.skyblock.players.stats.kills.SkyblockPlayerKills;
 
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -157,7 +157,7 @@ public class Hypixel extends ListenerAdapter {
                 eb.addField("Player Online: ", ":green_circle: \n"
                         + "Location: " + hypixel.getPlayerStatus(playerName).getGame().getMode(), true);
             } else {
-                String lastLoginDate = convertMillisToDate(player.getLastLogin());
+                String lastLoginDate = new MillisToDate(player.getLastLogin()).convertMillisToDate();
                 eb.addField("Player Online: ", ":red_circle: \n [Last Online: " + lastLoginDate + "] :hourglass:", true);
             }
 
@@ -276,7 +276,8 @@ public class Hypixel extends ListenerAdapter {
                     + "209", true);
 
             //Calls date first joined.
-            eb.addField(":calendar: Player First Joined:", convertMillisToDate(skyblockPlayer.getFirstJoin()), true);
+            eb.addField(":calendar: Player First Joined:", new MillisToDate(skyblockPlayer.getFirstJoin()).convertMillisToDate(),
+                    true);
 
             eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
             event.getChannel().sendMessage(eb.build()).queue();
@@ -757,17 +758,5 @@ public class Hypixel extends ListenerAdapter {
         decimalFormat.setGroupingSize(3);
 
         return decimalFormat.format(withoutCommas);
-    }
-
-
-    //Converts epoch time to date.
-    public static String convertMillisToDate(long millis) {
-
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-        Date date = new Date(millis);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(millis);
-
-        return formatter.format(date);
     }
 }

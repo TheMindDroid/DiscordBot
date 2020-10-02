@@ -1,4 +1,4 @@
-package commands.HypixelClasses;
+package commands.HypixelClasses.ComputationalClasses;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
