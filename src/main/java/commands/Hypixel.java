@@ -2,6 +2,7 @@
 
 package commands;
 
+import commands.HypixelClasses.AddDatedFooter;
 import commands.HypixelClasses.Collection;
 import commands.HypixelClasses.Minions;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -119,7 +120,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(":chart_with_upwards_trend: Guild Level:", "Level: " + guild.getLevel()
                     + " \nExperience: " + addCommas(guild.getExp()), true);
 
-            eb.setFooter(addDatedFooter(event));
+            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
             event.getChannel().sendMessage(eb.build()).queue();
         } catch (Exception e) {
             sendErrorMessage(event, "API Unavailable", "Unable to gather Guild information." , false);
@@ -274,7 +275,7 @@ public class Hypixel extends ListenerAdapter {
             //Calls date first joined.
             eb.addField(":calendar: Player First Joined:", convertMillisToDate(skyblockPlayer.getFirstJoin()), true);
 
-            eb.setFooter(addDatedFooter(event));
+            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
             event.getChannel().sendMessage(eb.build()).queue();
 
         } catch (Exception e) {
@@ -317,7 +318,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField("Tarantula Broodfather :spider_web:", spiderStats, true);
             eb.addField("Sven Packmaster :wolf:", wolfStats, true);
 
-            eb.setFooter(addDatedFooter(event));
+            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
 
             event.getChannel().sendMessage(eb.build()).queue();
 
@@ -420,7 +421,7 @@ public class Hypixel extends ListenerAdapter {
             }
             eb.addField(":bar_chart: Average Skill Level:", "Level: " + (totalSkillLevelsAdded / 10), true);
 
-            eb.setFooter(addDatedFooter(event));
+            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
 
             event.getChannel().sendMessage(eb.build()).queue();
 
@@ -476,7 +477,7 @@ public class Hypixel extends ListenerAdapter {
                 eb.addField(minion.getCompletedString());
             }
 
-            eb.setFooter(addDatedFooter(event));
+            eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
 
             event.getChannel().sendMessage(eb.build()).queue();
         } catch (Exception e) {
@@ -558,7 +559,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(collection.getCompletedString());
         }
 
-        eb.setFooter(addDatedFooter(event));
+        eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -592,7 +593,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(collection.getCompletedString());
         }
 
-        eb.setFooter(addDatedFooter(event));
+        eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -622,7 +623,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(collection.getCompletedString());
         }
 
-        eb.setFooter(addDatedFooter(event));
+        eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -647,7 +648,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(collection.getCompletedString());
         }
 
-        eb.setFooter(addDatedFooter(event));
+        eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -676,7 +677,7 @@ public class Hypixel extends ListenerAdapter {
             eb.addField(collection.getCompletedString());
         }
 
-        eb.setFooter(addDatedFooter(event));
+        eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
         event.getChannel().sendMessage(eb.build()).queue();
     }
 
@@ -774,15 +775,5 @@ public class Hypixel extends ListenerAdapter {
             eb.setFooter("*Player may not have a Skyblock profile or their API settings are disabled.");
         }
         event.getChannel().sendMessage(eb.build()).queue();
-    }
-
-
-    //Adds a dated footer to each embed.
-    public static String addDatedFooter(GuildMessageReceivedEvent event) {
-
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-        Date date = new Date();
-
-        return "Request was made @ " + formatter.format(date) + " by " + Objects.requireNonNull(event.getMember()).getUser().getAsTag();
     }
 }
