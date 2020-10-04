@@ -115,6 +115,13 @@ public class Skills {
             } catch (Exception e) {
                 eb.addField(":service_dog: Taming ", "Player has not progressed in this skill.", false);
             }
+
+            if (totalSkillLevelsAdded == 0) {
+                new ErrorMessage(event,"API Unavailable", "Player's API settings are disabled.",
+                        true).sendErrorMessage();
+                return;
+            }
+
             eb.addField(":bar_chart: Average Skill Level:", "Level: " + (totalSkillLevelsAdded / 10), true);
 
             eb.setFooter(new AddDatedFooter(Objects.requireNonNull(event.getMember()).getUser().getAsTag()).addDatedFooter());
