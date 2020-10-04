@@ -4,13 +4,13 @@ package commands.HypixelClasses;
 import commands.HypixelClasses.ComputationalClasses.AddCommas;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-public class Collection {
+public class CollectionBuilder {
 
     private int tiers;
     private final int exp;
     private final String collectionName;
 
-    public Collection(int tiers, int exp, String collectionName) {
+    public CollectionBuilder(int tiers, int exp, String collectionName) {
         this.tiers = tiers;
         this.exp = exp;
         this.collectionName = collectionName;
@@ -22,6 +22,6 @@ public class Collection {
 
     public MessageEmbed.Field getCompletedString() {
         return new MessageEmbed.Field(collectionName, "Level: " + tiers + "\nExperience: " +
-                new AddCommas(exp), true);
+                new AddCommas(exp).addCommas(), true);
     }
 }
